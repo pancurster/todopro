@@ -1,7 +1,7 @@
 #ifndef __TASKLIST_H__
 #define __TASKLIST_H__
 
-class TaskList {
+class TaskManager {
     public:
         std::map<std::string, Task*> list;
 };
