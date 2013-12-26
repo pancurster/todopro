@@ -2,9 +2,9 @@
 
 Task::Task()
     : id(-1)
-    , priority(-1)
+    , pri(-1)
     , type(OTHER)
-    , description("")
+    , desc("")
 {
 
 }

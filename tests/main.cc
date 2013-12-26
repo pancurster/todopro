@@ -11,9 +11,9 @@ BOOST_AUTO_TEST_CASE(Task_object)
 {
     Task t;
     BOOST_CHECK_EQUAL(t.id, -1);
-    BOOST_CHECK_EQUAL(t.priority, -1);
+    BOOST_CHECK_EQUAL(t.pri, -1);
     BOOST_CHECK_EQUAL(t.type, OTHER);
-    BOOST_CHECK_EQUAL(t.description, "");
+    BOOST_CHECK_EQUAL(t.desc, "");
     BOOST_CHECK_EQUAL(t.recurent_task.size(), 0);
 }
 
