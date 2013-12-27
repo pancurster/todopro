@@ -8,7 +8,7 @@ typedef int tid_t;
 typedef int tprior_t;
 
 enum {TASK_DESC_FIELDS=5};
-enum task_type {TASK, NOTE, OTHER };
+enum TaskType {TASK, NOTE, OTHER };
 
 class Task {
 public:
@@ -17,7 +17,7 @@ public:
 
     tid_t               id;
     tprior_t            pri;
-    task_type           type;
+    TaskType            type;
     std::string         desc;
     std::list<Task*>    recurent_task;
 private:

@@ -56,7 +56,7 @@ void SimpleFileFormat::deserialize()
         s = e + 1;
 
         e = buf.find(":", s);
-        t->type = static_cast<task_type>(std::stoi(buf.substr(s, e)));
+        t->type = static_cast<TaskType>(std::stoi(buf.substr(s, e)));
         s = e + 1;
 
         e = buf.find(":", s);

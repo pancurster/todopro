@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include <boost/program_options.hpp>
 
@@ -59,7 +60,7 @@ void ToDoPro::parse_program_options(int ac, char* av[], POVars &vm)
 
 int main(int argc, char* argv[])
 {
-    tdp = new ToDoPro;
+    std::unique_ptr<ToDoPro> tdp(new ToDoPro);
     return tdp->exec(argc, argv);
 }
 
