@@ -5,26 +5,36 @@
 #include "types.h"
 #include "todopro.h"
 #include "taskmanager.h"
-#include "cliview.h"
+#include "taskview.h"
 #include "task.h"
 
 ToDoPro* tdp;
 
+ToDoPro::ToDoPro()
+    : taskmanager(new TaskManager)
+    , view(new CliView)
+{
+}
+
+ToDoPro::~ToDoPro()
+{
+}
+
 int ToDoPro::exec(int ac, char* av[])
 {
-    povars vm;
+    POVars vm;
     parse_program_options(ac, av, vm);
 
     if (vm.count("add")) {
-        tdp->taskmanager->add(vm);
+        tdp->taskmanager->add(&vm);
     } else {
-        tdp->view();
+        tdp->view->show();
     }
 
     return 0;
 }
 
-void ToDoPro::parse_program_options(int ac, char* av[], povars &vm)
+void ToDoPro::parse_program_options(int ac, char* av[], POVars &vm)
 {
     namespace po = boost::program_options;
 
@@ -50,6 +60,6 @@ void ToDoPro::parse_program_options(int ac, char* av[], povars &vm)
 int main(int argc, char* argv[])
 {
     tdp = new ToDoPro;
-    return tdp.exec(argc, argv);
+    return tdp->exec(argc, argv);
 }
 
