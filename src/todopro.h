@@ -16,7 +16,6 @@ public:
     TaskManager* taskmanager;
     TaskView*    view;
 private:
-    void parse_program_options(int ac, char* av[], POVars &vm);
 };
 
 #endif //__TODOPRO_H__

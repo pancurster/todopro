@@ -20,6 +20,10 @@ SimpleFileFormat::~SimpleFileFormat()
 
 void SimpleFileFormat::serialize()
 {
+    // TODO:
+    // For clarity the body of this function can be moved
+    // to private function and called from here (same for
+    // rest of SerDes interface implementation).
     std::ofstream file;
     file.open(filename.c_str(), std::ifstream::out);
     for (std::vector<Task*>::const_iterator i = task_container.begin();

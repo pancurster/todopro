@@ -3,7 +3,7 @@
 Task::Task()
     : id(-1)
     , pri(-1)
-    , type(OTHER)
+    , type(TT_OTHER)
     , desc("")
 {
 

@@ -5,6 +5,7 @@
 
 #include "types.h"
 #include "todopro.h"
+#include "poparser.h"
 #include "taskmanager.h"
 #include "taskview.h"
 #include "task.h"
@@ -23,39 +24,20 @@ ToDoPro::~ToDoPro()
 
 int ToDoPro::exec(int ac, char* av[])
 {
-    POVars vm;
-    parse_program_options(ac, av, vm);
+    POParser vm(ac, av);
 
     if (vm.count("add")) {
         tdp->taskmanager->add(&vm);
+
+    } else if (vm.count("help")) {
+        std::cout << vm.main_desc << std::endl;
+        exit(0);
+
     } else {
         tdp->view->show();
     }
 
     return 0;
-}
-
-void ToDoPro::parse_program_options(int ac, char* av[], POVars &vm)
-{
-    namespace po = boost::program_options;
-
-    po::options_description desc("Usage: tdp [options]\nOptions");
-    desc.add_options()
-        ("help,h",  "help msg")
-        ("add,a",   "add task")
-        ("pri,p",   "set priority")
-        ("task,t",  "add task [default]")
-        ("note,n",  "add note")
-        ("dead,d",  "set deadline")
-        ;
-    po::store(po::parse_command_line(ac, av, desc), vm);
-    po::notify(vm);
-
-    // Help can be handled here
-    if (vm.count("help")) {
-        std::cout << desc << std::endl;
-        exit(0);
-    }
 }
 
 int main(int argc, char* argv[])

@@ -1,7 +1,7 @@
 #include <map>
 
 #include "task.h"
-#include "types.h"
+#include "poparser.h"
 #include "taskmanager.h"
 
 void TaskManager::add(Task* t)

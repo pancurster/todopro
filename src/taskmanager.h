@@ -2,7 +2,8 @@
 #define __TASKLIST_H__
 
 #include <map>
-#include "types.h"
+
+#include "poparser.h"
 
 class Task;
 

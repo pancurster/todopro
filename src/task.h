@@ -8,7 +8,7 @@ typedef int tid_t;
 typedef int tprior_t;
 
 enum {TASK_DESC_FIELDS=5};
-enum TaskType {TASK, NOTE, OTHER };
+enum TaskType {TT_TASK, TT_NOTE, TT_OTHER};
 
 class Task {
 public:
