@@ -1,7 +1,7 @@
-#ifndef __TODOPRO_H__
-#define __TODOPRO_H__
+#ifndef TODOPRO_H
+#define TODOPRO_H
 
-#include "types.h"
+#include "poparser.h"   // POVars
 
 class TaskManager;
 class TaskView;
@@ -11,11 +11,16 @@ public:
     ToDoPro();
     ~ToDoPro();
 
-    int exec(int ac, char* av[]);
+    bool    add     (POVars& vm);
+    bool    rm      (POVars& vm);
+    bool    modify  (POVars& vm);
+
+    int     exec    (int ac, char* av[]);
 
     TaskManager* taskmanager;
     TaskView*    view;
 private:
 };
 
-#endif //__TODOPRO_H__
+#endif //TODOPRO_H
+

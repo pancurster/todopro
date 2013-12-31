@@ -1,10 +1,13 @@
-#ifndef __SERIALIZER_H__
-#define __SERIALIZER_H__
+#ifndef SERIALIZER_H
+#define SERIALIZER_H
 
 #include <string>
 #include <vector>
 
+#include "task.h"
+
 class Task;
+struct info_t;
 
 /*
  * TODO: 1) Common interface for serialization.
@@ -28,10 +31,10 @@ class Task;
  */
 class SerDes {
 public:
-    SerDes(const std::string filename, const std::vector<Task*> &tl) {};
+    SerDes() {};
     virtual ~SerDes() {};
-    virtual void serialize() = 0;
-    virtual void deserialize() = 0;
+    virtual std::shared_ptr<std::string> serialize(TaskMap&) = 0;
+    virtual TaskVec& deserialize(std::string) = 0;
 };
 
 /*
@@ -39,13 +42,11 @@ public:
  */
 class SimpleFileFormat : public SerDes {
 public:
-    SimpleFileFormat (const std::string, std::vector<Task*> &);
+    SimpleFileFormat ();
     ~SimpleFileFormat();
-    void serialize();
-    void deserialize();
+    std::shared_ptr<std::string> serialize(TaskMap&);
+    TaskVec& deserialize(std::string);
 private:
-    std::vector<Task*> & task_container;
-    std::string filename;
 };
 
 class JSONFileFormat : public SerDes {
@@ -54,5 +55,5 @@ class JSONFileFormat : public SerDes {
 class iCalendarFileFormat : public SerDes {
 };
 
-#endif //__SERIALIZER_H__
+#endif //SERIALIZER_H
 

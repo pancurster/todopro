@@ -15,9 +15,13 @@ include_directories(
 )
 
 # production libs
+AUX_SOURCE_DIRECTORY(../src SRC)
 
 add_library(system_under_test 
-    ../src/task.cc
+    ${SRC}
+    #../src/task.cc
+    #../src/todopro.cc
+    #../src/taskmanager.cc
     ############################
     # add production code here #
     ############################

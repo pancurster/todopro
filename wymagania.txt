@@ -1,0 +1,9 @@
+ Code Officer: Wojciech Razik Trainee: Lukasz Panek
+
+Task: Create a Todo list, which would allow you to store notes, tasks,
+appointments, birthdays etc. Tasks may be recurrent. List should be somehow
+preserved between application runs, and programmer should be able to easily
+change the means of storage.
+
+    Pure C++ implementation. 
+

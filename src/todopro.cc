@@ -9,35 +9,39 @@
 #include "taskmanager.h"
 #include "taskview.h"
 #include "task.h"
+#include "datastore.h"
 
-ToDoPro* tdp;
 
 ToDoPro::ToDoPro()
     : taskmanager(new TaskManager)
-    , view(new CliView)
-{
-}
+    , view(new CliView) { }
 
-ToDoPro::~ToDoPro()
-{
-}
+ToDoPro::~ToDoPro() { }
 
 int ToDoPro::exec(int ac, char* av[])
 {
     POParser vm(ac, av);
 
     if (vm.count("add")) {
-        tdp->taskmanager->add(&vm);
-
+        if (!add(vm))
+            return 1;
     } else if (vm.count("help")) {
         std::cout << vm.main_desc << std::endl;
         exit(0);
-
+    } else if (vm.count("desc")) {
+        std::cout << "description:" << vm["desc"].as<std::string>() << "\n";
     } else {
-        tdp->view->show();
+        view->show();
     }
 
     return 0;
+}
+
+bool ToDoPro::add(POVars& vm)
+{
+    taskmanager->add(vm);
+    DataStore<SimpleFileFormat> dstore;
+    dstore.save("test.db", taskmanager->m_mainlist);
 }
 
 int main(int argc, char* argv[])

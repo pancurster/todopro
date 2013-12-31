@@ -1,73 +1,54 @@
 #include <fstream>
 #include <string>
-#include <bits/basic_string.h>
+#include <algorithm>
+#include <memory>
 
 #include "task.h"
 #include "serializer.h"
 
-SimpleFileFormat::SimpleFileFormat(const std::string filename,
-                                   std::vector<Task*> &tl)
-    : SerDes(filename, tl)
-    , filename(filename)
-    , task_container(tl)
-{
-}
 
-SimpleFileFormat::~SimpleFileFormat()
-{
+SimpleFileFormat::SimpleFileFormat() { }
 
-}
+SimpleFileFormat::~SimpleFileFormat() { }
 
-void SimpleFileFormat::serialize()
+std::shared_ptr<std::string> SimpleFileFormat::serialize(TaskMap& tvec)
 {
-    // TODO:
-    // For clarity the body of this function can be moved
-    // to private function and called from here (same for
-    // rest of SerDes interface implementation).
-    std::ofstream file;
-    file.open(filename.c_str(), std::ifstream::out);
-    for (std::vector<Task*>::const_iterator i = task_container.begin();
-         i != task_container.end();
-         i++)
-    {
-        file << (*i)->id << ":"
-             << (*i)->pri << ":"
-             << (*i)->desc << ";"
-             << "\n";
+    std::shared_ptr<std::string> image(new std::string);
+    for (TaskMap::iterator it=tvec.begin(); it != tvec.end(); ++it) {
+        *image += (it->second)->info.id;
+        *image += ":";
+        *image += (it->second)->info.pri;
+        *image += ":";
+        *image += (it->second)->info.desc;
+        *image += ";\n";
     }
-    file.close();
+    return image;
 }
 
-void SimpleFileFormat::deserialize()
+TaskVec& SimpleFileFormat::deserialize(std::string image)
 {
+#if 0
     int s=0;
     int e=0;
-    Task* t;
-    std::string buf="";
-    std::string token="";
-    std::ifstream file;
-    file.open(filename.c_str(), std::ifstream::in);
+    info_t info;
 
-    while (std::getline(file, buf)) {
-        t = new Task;
+    e = image.find(":", s);
+    info.id = std::stoi(image.substr(s, e));
+    s = e + 1;
 
-        e = buf.find(":", s);
-        t->id = std::stoi(buf.substr(s, e));
-        s = e + 1;
+    e = image.find(":", s);
+    info.pri = std::stoi(image.substr(s, e));
+    s = e + 1;
 
-        e = buf.find(":", s);
-        t->pri = std::stoi(buf.substr(s, e));
-        s = e + 1;
+    e = image.find(":", s);
+    info.type = static_cast<TaskType>(std::stoi(image.substr(s, e)));
+    s = e + 1;
 
-        e = buf.find(":", s);
-        t->type = static_cast<TaskType>(std::stoi(buf.substr(s, e)));
-        s = e + 1;
+    e = image.find(":", s);
+    info.desc = image.substr(s, e);
+    s = e + 1;
 
-        e = buf.find(":", s);
-        t->desc = buf.substr(s, e);
-        s = e + 1;
-
-        task_container.push_back(t);
-    }
+    return info;
+#endif
 }
 

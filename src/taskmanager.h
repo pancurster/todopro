@@ -1,18 +1,23 @@
-#ifndef __TASKLIST_H__
-#define __TASKLIST_H__
+#ifndef TASKLIST_H
+#define TASKLIST_H
 
 #include <map>
+#include <memory>
 
 #include "poparser.h"
-
-class Task;
+#include "task.h"
 
 class TaskManager {
     public:
+        TaskManager();
+        ~TaskManager();
         void add(Task*);
-        void add(POVars* vm);
+        bool add(POVars& vm);
+        bool save();
+
+        TaskMap m_mainlist;
     private:
-        std::map<std::string, Task*> m_mainlist;
 };
 
-#endif //__TASKLIST_H__
+#endif //TASKLIST_H
+
