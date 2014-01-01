@@ -8,6 +8,8 @@ typedef po::variables_map POVars;
 
 /*
  * POParser - Program Options Parser
+ *
+ * We use here Boost library.
  */
 class POParser : public POVars {
 public:

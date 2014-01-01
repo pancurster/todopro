@@ -8,14 +8,18 @@ class TaskView;
 
 class ToDoPro {
 public:
-    ToDoPro();
-    ~ToDoPro();
+    ToDoPro     ();
+    ~ToDoPro    ();
 
-    bool    add     (POVars& vm);
-    bool    rm      (POVars& vm);
-    bool    modify  (POVars& vm);
+    // Main flow methods
+    void load();
+    void save();
+    void commands(int ac, char* av[]);
 
-    int     exec    (int ac, char* av[]);
+    bool add(POVars& vm);
+    bool rm(POVars& vm);
+    bool modify(POVars& vm);
+    int exec(int ac, char* av[]);
 
     TaskManager* taskmanager;
     TaskView*    view;
