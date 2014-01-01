@@ -20,15 +20,15 @@ bool TaskManager::add(POVars& vm)
     std::shared_ptr<Task> t(new Task);
 
     if (vm.count("pri")) {
-        t->info.pri = vm["pri"].as<int>();
+        t->payload->pri = vm["pri"].as<int>();
     }
     if (vm.count("desc")) {
-        t->info.desc = vm["desc"].as<std::string>();
+        t->payload->desc = vm["desc"].as<std::string>();
     } else {
         return false;
     }
 
-    //TODO: why clang shows here error?
+    //TODO: why clang show error here?
     m_mainlist.insert(
                       std::pair<std::string, std::shared_ptr<Task>>(
                           vm["desc"].as<std::string>(),

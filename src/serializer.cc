@@ -15,40 +15,55 @@ std::shared_ptr<std::string> SimpleFileFormat::serialize(TaskMap& tvec)
 {
     std::shared_ptr<std::string> image(new std::string);
     for (TaskMap::iterator it=tvec.begin(); it != tvec.end(); ++it) {
-        *image += (it->second)->info.id;
+        *image += std::to_string((it->second)->payload->id);
         *image += ":";
-        *image += (it->second)->info.pri;
+        *image += std::to_string((it->second)->payload->pri);
         *image += ":";
-        *image += (it->second)->info.desc;
+        *image += (it->second)->payload->desc;
         *image += ";\n";
     }
     return image;
 }
 
-TaskVec& SimpleFileFormat::deserialize(std::string image)
+void SimpleFileFormat::deserialize(std::string& image, TaskMap& tmap)
 {
-#if 0
     int s=0;
     int e=0;
-    info_t info;
+    std::shared_ptr<Task> t;
+    std::string line;
 
-    e = image.find(":", s);
-    info.id = std::stoi(image.substr(s, e));
+    while (e = image.find(";\n", s)) {
+        line = image.substr(s, e);
+        t = deserialize_line(line);
+        tmap.insert(std::pair<std::string, std::shared_ptr<Task>>(t->payload->desc, t));
+        s = e+1;
+    }
+}
+
+std::shared_ptr<Task> SimpleFileFormat::deserialize_line(std::string& line)
+{
+    int s=0;
+    int e=0;
+    std::shared_ptr<Task> t(new Task);
+
+    e = line.find(":", s);
+    t->payload->id = std::stoi(line.substr(s, e));
     s = e + 1;
 
-    e = image.find(":", s);
-    info.pri = std::stoi(image.substr(s, e));
+    e = line.find(":", s);
+    t->payload->pri = std::stoi(line.substr(s, e));
     s = e + 1;
 
-    e = image.find(":", s);
-    info.type = static_cast<TaskType>(std::stoi(image.substr(s, e)));
+    /*
+    e = line.find(":", s);
+    payload.type = static_cast<TaskType>(std::stoi(line.substr(s, e)));
+    s = e + 1;
+    */
+
+    e = line.find(":", s);
+    t->payload->desc = line.substr(s, e);
     s = e + 1;
 
-    e = image.find(":", s);
-    info.desc = image.substr(s, e);
-    s = e + 1;
-
-    return info;
-#endif
+    return t;
 }
 
