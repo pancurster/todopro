@@ -15,7 +15,7 @@ include_directories(
 
 #set(CMAKE_CXX_COMPILER clang++)
 
-AUX_SOURCE_DIRECTORY(../src SRC)
+AUX_SOURCE_DIRECTORY(src SRC)
 add_executable(${CMAKE_PROJECT_NAME} ${SRC})
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
