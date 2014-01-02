@@ -58,6 +58,7 @@ template <class T>
 bool DataStore<T>::export_data()
 {
     //TODO
+    return false;
 }
 
 
@@ -77,13 +78,19 @@ bool DataStore<T>::read_from_file(const std::string& filename, std::string& imag
 {
     std::ifstream file;
     file.open(filename, std::ifstream::in);
+    if (!file.good()) {
+        std::cout << "No file\n";
+        image = "";
+        return true;
+    }
     file.seekg(0, file.end);
     int len = file.tellg();
     file.seekg(0, file.beg);
-    char* buf = new char[len];
+    char* buf = new char[len+1];
     file.read(buf, len);
     image = buf;
     delete[] buf;
+    return true;
 }
 
 #endif //DATASTORE_H

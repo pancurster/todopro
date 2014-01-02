@@ -10,15 +10,16 @@ public:
 
 class CliView : public TaskView {
 public:
-    void show(TaskMap& tmap)
-    {
-        std::cout << "Id  Pri  Desc\n";
-        for(TaskMap::iterator it=tmap.begin(); it!=tmap.end(); ++it) {
-            std::cout << (*it->second).payload->id << "  "
-                      << (*it->second).payload->pri << "   "
-                      << it->first << "\n";
-        }
-    }
+    void show(TaskMap& tmap);
+    void showTask(std::shared_ptr<Task>& t);
+    void showTask(Task* t);
+
+private:
+    void show_task_common(Task* t);
+
+    static const char* KBOLD;
+    static const char* KNORM;
+    static const char* KREV;
 };
 
 #endif //__TASKVIEW_H__

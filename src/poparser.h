@@ -16,7 +16,9 @@ public:
     POParser(int ac, char* av[]);
     ~POParser();
 
-    po::options_description main_desc;
+    po::options_description all;
+    po::options_description general_desc;
+    po::options_description detailed_desc;
 
 private:
     void parse_program_options(int ac, char* av[]);

@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(tdp)
 
-add_definitions(-std=c++11)
+add_definitions(-std=c++11 -Wall)
 
 set(BUILD_SHARED_LIBS true)
 

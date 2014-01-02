@@ -11,6 +11,7 @@
 #include "task.h"
 #include "datastore.h"
 
+const char* ToDoPro::VERSION="0.0.1";
 
 int main(int argc, char* argv[])
 {
@@ -19,8 +20,7 @@ int main(int argc, char* argv[])
 }
 
 /*
- * Na tym poziomie wykonania programu mozemy przyjac ze jedyne abstrakcje
- * z jakimi mamy do czynienia modeluja prosty przeplyw:
+ * Mamy tutaj prosty przeplyw:
  * 1) zaladowanie, 2) modyfikacja, 3) zapis.
  */
 int ToDoPro::exec(int ac, char* av[])
@@ -43,7 +43,9 @@ ToDoPro::~ToDoPro() { }
 
 bool ToDoPro::add(POVars& vm)
 {
+    //TODO
     taskmanager->add(vm);
+    return false;
 }
 
 void ToDoPro::load()
@@ -55,17 +57,60 @@ void ToDoPro::load()
 void ToDoPro::commands(int ac, char* av[])
 {
     POParser vm(ac, av);
+    std::shared_ptr<Task> temptask;
+    bool new_task_ready_to_add = false;
 
-    if (vm.count("add")) {
-        add(vm);
-    } else if (vm.count("help")) {
-        std::cout << vm.main_desc << std::endl;
-        exit(0);
-    } else if (vm.count("desc")) {
-        std::cout << "description:" << vm["desc"].as<std::string>() << "\n";
+    if (vm.count("help")) {
+        std::cout << vm.all << std::endl;
+        return;
+    }
+    if (vm.count("version")) {
+        std::cout << ToDoPro::VERSION << std::endl;
+        return;
     }
 
-    view->show(taskmanager->m_mainlist);
+    // CREATE/SELECT
+    if (vm.count("select")) {
+        // Traktujemy wzorzec jako pelny klucz.
+        // Jesli to nie daje rezultatu to szukamy jako czesc reprezentacji klucza
+        temptask = taskmanager->findByDesc(vm["select"].as<std::string>());
+        if (temptask == 0) {
+            temptask = taskmanager->findByDescPartial(vm["select"].as<std::string>());
+        }
+        if (temptask == 0) {
+            std::cout<<"Not found\n";
+            return;
+        }
+    } else if (vm.count("new")) {
+        std::cout<<"Creating empty task... ";
+        temptask = taskmanager->createEmptyTask();
+        temptask->payload->desc = vm["new"].as<std::string>();
+        new_task_ready_to_add = true;
+        std::cout<<"done\n";
+    }
+
+    // MODIFY
+    if (vm.count("pri")) {
+        temptask->payload->pri = vm["pri"].as<int>();
+    }
+
+    if (vm.count("desc")) {
+        std::cout<<"Setting desc... ";
+        temptask->payload->desc = vm["desc"].as<std::string>();
+        std::cout<<"done\n";
+    }
+
+    if (new_task_ready_to_add) {
+        std::cout<<"adding new task\n";
+        taskmanager->add(temptask);
+    }
+
+    // VIEW
+    if (temptask) {
+        view->showTask(temptask);
+    } else {
+        view->show(taskmanager->m_mainlist);
+    }
 }
 
 void ToDoPro::save()

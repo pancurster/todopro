@@ -5,6 +5,7 @@
 
 class TaskManager;
 class TaskView;
+class CliView;
 
 class ToDoPro {
 public:
@@ -21,9 +22,13 @@ public:
     bool modify(POVars& vm);
     int exec(int ac, char* av[]);
 
-    TaskManager* taskmanager;
-    TaskView*    view;
+    TaskManager*    taskmanager;
+    //TaskView*    view;
+    CliView*        view;
+
+    static const char* VERSION;
 private:
+
 };
 
 #endif //TODOPRO_H

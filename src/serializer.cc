@@ -28,18 +28,21 @@ std::shared_ptr<std::string> SimpleFileFormat::serialize(TaskMap& tvec)
 
 void SimpleFileFormat::deserialize(std::string& image, TaskMap& tmap)
 {
-    int s=0;
-    int e=0;
     std::shared_ptr<Task> t;
     std::string line;
 
-   // while (e = image.find(";\n", s)) {
-        e = image.find(";\n", s);
-        line = image.substr(s, e);
-        t = deserialize_line(line);
+    int s=0;
+    int e=0;
+    int len=0;
+    while ( (e = image.find(";", s)) != std::string::npos) {
+        len = e - s;
+        line = image.substr(s, len);
+
+        t = deserialize_line(line); //XXX
         tmap.insert(std::pair<std::string, std::shared_ptr<Task>>(t->payload->desc, t));
-        s = e+1;
-    //}
+
+        s = e + strlen(";\n");
+    }
 }
 
 std::shared_ptr<Task> SimpleFileFormat::deserialize_line(std::string& line)
@@ -50,13 +53,11 @@ std::shared_ptr<Task> SimpleFileFormat::deserialize_line(std::string& line)
     std::shared_ptr<Task> t(new Task);
 
     e = line.find(":", s);
-    //t->payload->id = std::stoi(line.substr(s, e));
     strcpy(buf, line.substr(s, e).c_str());
-    sscanf(buf, "%d", &t->payload->pri);
+    sscanf(buf, "%d", &t->payload->id);
     s = e + 1;
 
     e = line.find(":", s);
-    //t->payload->pri = std::stoi(line.substr(s, e));
     strcpy(buf, line.substr(s, e).c_str());
     sscanf(buf, "%d", &t->payload->pri);
     s = e + 1;
