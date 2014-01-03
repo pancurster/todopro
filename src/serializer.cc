@@ -34,7 +34,7 @@ void SimpleFileFormat::deserialize(std::string& image, TaskMap& tmap)
     int s=0;
     int e=0;
     int len=0;
-    while ( (e = image.find(";", s)) != std::string::npos) {
+    while ( (e = image.find(";", s)) != static_cast<int>(std::string::npos)) {
         len = e - s;
         line = image.substr(s, len);
 

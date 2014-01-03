@@ -5,21 +5,29 @@
 
 class TaskView {
 public:
-    virtual void show(TaskMap&) = 0;
+    virtual void show(TaskMap&) const = 0;
 };
 
 class CliView : public TaskView {
 public:
-    void show(TaskMap& tmap);
-    void showTask(std::shared_ptr<Task>& t);
-    void showTask(Task* t);
+    void show(TaskMap& tmap) const;
+    void showTask(std::shared_ptr<Task>& t) const;
+    void showTask(Task* t) const;
 
 private:
-    void show_task_common(Task* t);
+    void show_task_common(Task* t) const;
+    void print_header() const ;
 
-    static const char* KBOLD;
-    static const char* KNORM;
-    static const char* KREV;
+    static const char* K_BOLD;
+    static const char* K_NO_STYLE;
+    static const char* K_BLACK_ON_WHITE;
+    static const char* K_WHITE_ON_BLACK;
+
+    enum {
+        STYLE_FIELD_WIDTH_ID    = 5,
+        STYLE_FIELD_WIDTH_PRI   = 5,
+        STYLE_FIELD_WIDTH_DESC  = 70
+    };
 };
 
 #endif //__TASKVIEW_H__

@@ -1,6 +1,7 @@
 *svn*
 *.o
 *.swp
+tags
 build/
 debug/
 

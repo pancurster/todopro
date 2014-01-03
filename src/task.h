@@ -37,6 +37,8 @@ public:
     }* payload;
 
 private:
+    Task(const Task&);
+    Task& operator=(const Task&);
 };
 
 #endif //TASK_H

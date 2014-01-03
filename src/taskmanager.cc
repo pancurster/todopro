@@ -13,7 +13,10 @@ TaskManager::TaskManager()
 
 bool TaskManager::add(std::shared_ptr<Task>& t)
 {
-    m_mainlist.insert(std::make_pair(t->payload->desc, t));
+    std::pair<TaskMap::iterator, bool> ret = 
+        m_mainlist.insert(std::make_pair(t->payload->desc, t));
+
+    return ret.second;
 }
 
 bool TaskManager::add(POVars& vm)
@@ -30,11 +33,14 @@ bool TaskManager::add(POVars& vm)
     }
 
     //TODO: why clang show error here?
+#if 0
     m_mainlist.insert(
                       std::pair<std::string, std::shared_ptr<Task>>(
                           vm["desc"].as<std::string>(),
                           t)
                      );
+#endif
+    m_mainlist.insert(std::make_pair(vm["desc"].as<std::string>(), t));
 
     return true; //TODO
 }
@@ -68,7 +74,6 @@ std::shared_ptr<Task> TaskManager::findByDesc(std::string desc)
     if (task_item_it != m_mainlist.end()) {
         return task_item_it->second;
     } else {
-        // XXX czy to jest poprawne?
         return 0;
     }
 }
@@ -79,7 +84,7 @@ std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
     std::string key;
     for (TaskMap::iterator it=m_mainlist.begin(); it != m_mainlist.end(); ++it) {
         key = it->first;
-        if (key.find(descpart) != -1)
+        if (key.find(descpart) != std::string::npos)
             return it->second;
     }
     return 0;

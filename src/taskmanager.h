@@ -21,6 +21,9 @@ public:
     TaskMap m_mainlist;
 
 private:
+    TaskManager(const TaskManager&);
+    TaskManager& operator=(const TaskManager&);
+
     int get_new_task_id();
     int get_default_pri();
 
