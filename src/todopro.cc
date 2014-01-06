@@ -1,15 +1,15 @@
-#include <iostream>
-#include <memory>
-
-#include <boost/program_options.hpp>
-
-#include "types.h"
 #include "todopro.h"
+#include "types.h"
 #include "poparser.h"
 #include "taskmanager.h"
 #include "taskview.h"
 #include "task.h"
 #include "datastore.h"
+
+#include <boost/program_options.hpp>
+
+#include <iostream>
+#include <memory>
 
 const char* ToDoPro::VERSION="0.0.1";
 
@@ -41,19 +41,17 @@ ToDoPro::ToDoPro()
 ToDoPro::~ToDoPro() { }
 
 
-bool ToDoPro::add(POVars& vm)
-{
-    //TODO
-    taskmanager->add(vm);
-    return false;
-}
-
 void ToDoPro::load()
 {
     DataStore<SimpleFileFormat> dstore;
     dstore.load("test.db", taskmanager->m_mainlist);
 }
 
+//
+// Commands dispather
+// TODO move this to poparser module. Divide to functions like
+// 'no_action_functions', 'select_functions', 'modify_functions'
+// or something like that (?).
 void ToDoPro::commands(int ac, char* av[])
 {
     POParser vm(ac, av);
@@ -105,11 +103,19 @@ void ToDoPro::commands(int ac, char* av[])
         taskmanager->add(temptask);
     }
 
+    if (vm.count("remove")) {
+        taskmanager->del(temptask);
+    }
+
+    if (vm.count("done")) {
+        taskmanager->done(temptask);
+    }
+
     // VIEW
     if (temptask) {
         view->showTask(temptask);
     } else {
-        view->show(taskmanager->m_mainlist);
+        view->showTask(taskmanager->m_mainlist);
     }
 }
 

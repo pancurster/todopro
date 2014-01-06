@@ -1,7 +1,7 @@
-#include <memory>
-
 #include "task.h"
 #include "serializer.h"
+
+#include <memory>
 
 Task::Task()
     : payload(new TaskPayload)
@@ -10,10 +10,11 @@ Task::Task()
     payload->pri    = -1;
     payload->type   = TT_OTHER;
     payload->desc   = "";
+    payload->state  = TS_NOSTATE;
 }
 
 Task::~Task()
 {
-
+    delete payload;
 }
 

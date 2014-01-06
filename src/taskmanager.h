@@ -12,8 +12,8 @@ public:
     TaskManager();
     ~TaskManager();
     bool add(std::shared_ptr<Task>& t);
-    bool add(POVars& vm);
-    bool save();
+    bool del(std::shared_ptr<Task>& t);
+    bool done(std::shared_ptr<Task>& t);
     std::shared_ptr<Task> findByDesc(std::string desc);
     std::shared_ptr<Task> findByDescPartial(std::string desc);
     std::shared_ptr<Task> createEmptyTask();
@@ -26,10 +26,9 @@ private:
 
     int get_new_task_id();
     int get_default_pri();
+    int get_highest_task_id();
 
     enum { DEFAULT_PRI=0 };
-
-    int m_task_highest_id;
 };
 
 #endif //TASKLIST_H

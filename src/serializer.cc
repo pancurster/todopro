@@ -1,12 +1,12 @@
+#include "serializer.h"
+#include "task.h"
+
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <cstring>
 #include <algorithm>
 #include <memory>
-
-#include "task.h"
-#include "serializer.h"
-
 
 SimpleFileFormat::SimpleFileFormat() { }
 
@@ -19,6 +19,8 @@ std::shared_ptr<std::string> SimpleFileFormat::serialize(TaskMap& tvec)
         *image += std::to_string((it->second)->payload->id);
         *image += ":";
         *image += std::to_string((it->second)->payload->pri);
+        *image += ":";
+        *image += std::to_string((it->second)->payload->state);
         *image += ":";
         *image += (it->second)->payload->desc;
         *image += ";\n";
@@ -47,31 +49,45 @@ void SimpleFileFormat::deserialize(std::string& image, TaskMap& tmap)
 
 std::shared_ptr<Task> SimpleFileFormat::deserialize_line(std::string& line)
 {
-    int s=0;
-    int e=0;
-    char buf[50];
+    size_t s=0;
+    size_t e=0;
+    char buf[TASK_MAX_DESC_CHARACTERS];
     std::shared_ptr<Task> t(new Task);
 
-    e = line.find(":", s);
-    strcpy(buf, line.substr(s, e).c_str());
-    sscanf(buf, "%d", &t->payload->id);
-    s = e + 1;
+    bool parsing_success = false;
+    do {
+        if ((e = line.find(":", s)) == std::string::npos)
+            break;
+        strcpy(buf, line.substr(s, e).c_str());
+        sscanf(buf, "%d", &t->payload->id);
+        s = e + 1;
 
-    e = line.find(":", s);
-    strcpy(buf, line.substr(s, e).c_str());
-    sscanf(buf, "%d", &t->payload->pri);
-    s = e + 1;
+        if ((e = line.find(":", s)) == std::string::npos)
+            break;
+        strcpy(buf, line.substr(s, e).c_str());
+        sscanf(buf, "%d", &t->payload->pri);
+        s = e + 1;
 
-    /*
-    e = line.find(":", s);
-    payload.type = static_cast<TaskType>(std::stoi(line.substr(s, e)));
-    s = e + 1;
-    */
+        if ((e = line.find(":", s)) == std::string::npos)
+            break;
+        strcpy(buf, line.substr(s, e).c_str());
+        sscanf(buf, "%d", reinterpret_cast<int*>(&t->payload->state));
+        s = e + 1;
 
-    e = line.find(":", s);
-    t->payload->desc = line.substr(s, e);
-    s = e + 1;
+        // Don't miss the '!=' here
+        if ((e = line.find(";", s)) != std::string::npos)
+            break;
+        t->payload->desc = line.substr(s, e);
+        s = e + 1;
 
-    return t;
+        parsing_success = true;
+    } while (0);
+
+    if (parsing_success) {
+        return t;
+    } else {
+        std::cout << "Error parsing line:\n   " << line << "\n";
+        return 0;
+    }
 }
 

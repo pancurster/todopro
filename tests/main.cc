@@ -9,6 +9,9 @@
 #include "../src/poparser.h"
 #include "../src/datastore.h"
 
+// Other tests
+#include "taskmanager.test.cc"
+
 /*
  * BOOST_CHECK( add( 2,2 ) == 4 );        // #1 continues on error
  * BOOST_REQUIRE( add( 2,2 ) == 4 );      // #2 throws on error
@@ -36,10 +39,10 @@ struct TaskFixture {
     {
         BOOST_TEST_MESSAGE("setup TaskFixture");
 
-        t1->info->id  = 1;
-        t1->info->pri = 1;
-        t1->info->type = TT_TASK;
-        t1->info->desc = "Very important task";
+        t1->payload->id  = 1;
+        t1->payload->pri = 1;
+        t1->payload->type = TT_TASK;
+        t1->payload->desc = "Very important task";
     };
 
     ~TaskFixture() {
@@ -55,21 +58,21 @@ BOOST_AUTO_TEST_SUITE(example_must);
 BOOST_AUTO_TEST_CASE(Task_object)
 {
     Task t;
-    BOOST_CHECK_EQUAL(t.info->id, -1);
-    BOOST_CHECK_EQUAL(t.info->pri, -1);
-    BOOST_CHECK_EQUAL(t.info->type, TT_OTHER);
-    BOOST_CHECK_EQUAL(t.info->desc, "");
-    BOOST_CHECK_EQUAL(t.info->recurent_task.size(), 0);
+    BOOST_CHECK_EQUAL(t.payload->id, -1);
+    BOOST_CHECK_EQUAL(t.payload->pri, -1);
+    BOOST_CHECK_EQUAL(t.payload->type, TT_OTHER);
+    BOOST_CHECK_EQUAL(t.payload->desc, "");
+    BOOST_CHECK_EQUAL(t.payload->recurent_task.size(), 0);
 }
 
 BOOST_AUTO_TEST_CASE(File_saving)
 {
     std::shared_ptr<Task> t(new Task);
-    t->info->id = 1;
-    t->info->pri = 3;
-    t->info->desc = "Very important task";
+    t->payload->id = 1;
+    t->payload->pri = 3;
+    t->payload->desc = "Very important task";
     TaskMap tmap;
-    tmap.insert(std::pair<std::string, std::shared_ptr<Task>>(t->info->desc, t));
+    tmap.insert(std::pair<std::string, std::shared_ptr<Task>>(t->payload->desc, t));
     BOOST_CHECK_EQUAL(tmap.size(), 1);
     DataStore<SimpleFileFormat> dstore;
     dstore.save("test.db", tmap);
@@ -100,8 +103,9 @@ BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE(Task_Class_Test)
 BOOST_FIXTURE_TEST_CASE(Task_Test, TaskFixture)
 {
-    BOOST_CHECK_EQUAL(t1->info->id, 1);
-    t1->info->id = 2;
-    BOOST_CHECK_EQUAL(t1->info->id, 2);
+    BOOST_CHECK_EQUAL(t1->payload->id, 1);
+    t1->payload->id = 2;
+    BOOST_CHECK_EQUAL(t1->payload->id, 2);
 }
 BOOST_AUTO_TEST_SUITE_END()
+

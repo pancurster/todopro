@@ -17,9 +17,6 @@ public:
     void save();
     void commands(int ac, char* av[]);
 
-    bool add(POVars& vm);
-    bool rm(POVars& vm);
-    bool modify(POVars& vm);
     int exec(int ac, char* av[]);
 
     TaskManager*    taskmanager;

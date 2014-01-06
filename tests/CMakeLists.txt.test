@@ -4,7 +4,7 @@ project (empty_project)
 
 # General setup
 
-add_definitions(-std=c++11 -g)
+add_definitions(-std=c++11)
 
 set(BUILD_SHARED_LIBS true)
 
@@ -34,28 +34,36 @@ set_target_properties(system_under_test # <- add implementation libs here #
                LINK_FLAGS "-coverage"
 )
 
-add_executable(${CMAKE_PROJECT_NAME} main.cc)
+set (test_SRCS main.cc taskmanager.test.cc)
+
+foreach (src_FILE ${test_SRCS})
+    add_executable("${src_FILE}.t" ${src_FILE})
+    #add_executable(${CMAKE_PROJECT_NAME} main.cc)
 
 
-target_link_libraries(${CMAKE_PROJECT_NAME} 
-    ${Boost_LIBRARIES}
-    system_under_test
-    ############################
-    # add production libs here #
-    ############################
-)
-
+    target_link_libraries("${src_FILE}.t" 
+        ${Boost_LIBRARIES}
+        system_under_test
+        ############################
+        # add production libs here #
+        ############################
+    )
+endforeach(src_FILE)
 
 # helpers
 
 add_custom_target(run
-    COMMAND ${CMAKE_PROJECT_NAME}
+    foreach(src_FILE ${test_SRCS})
+        COMMAND "${src_FILE}.t"
+    endforeach(src_FILE)
 )
 
 add_custom_target(coverage
-    COMMAND find . -name *.gcda | xargs rm -vf
-    COMMAND ${CMAKE_PROJECT_NAME}
-    COMMAND lcov -c -d . -o coverage.info
-    COMMAND lcov --remove coverage.info "*/usr/*" "*/opt/*" "*/boost/*" -o coverage.info
-    COMMAND genhtml --legend coverage.info
+    foreach(src_FILE ${test_SRCS})
+        COMMAND find . -name *.gcda | xargs rm -vf
+        COMMAND "${src_FILE}.t"
+        COMMAND lcov -c -d . -o coverage.info
+        COMMAND lcov --remove coverage.info "*/usr/*" "*/opt/*" "*/boost/*" -o coverage.info
+        COMMAND genhtml --legend coverage.info -o "${src_FILE}.t.dir"
+    endforeach(src_FILE)
 )

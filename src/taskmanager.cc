@@ -1,54 +1,71 @@
+#include "poparser.h"
+#include "task.h"
+#include "serializer.h"
+#include "taskmanager.h"
+
+#include <cassert>
+
 #include <fstream>
 #include <map>
 #include <memory>
-
-#include "task.h"
-#include "poparser.h"
-#include "serializer.h"
-#include "taskmanager.h"
+#include <algorithm>
 
 TaskManager::TaskManager()
 {
 }
 
+// TODO Is passing reference to shared_ptr is ok?
 bool TaskManager::add(std::shared_ptr<Task>& t)
 {
+    // Generating id is simple. We increment bigest id number
+    // of already stored tasks.
+    t->payload->id = get_highest_task_id() + 1;
+
     std::pair<TaskMap::iterator, bool> ret = 
         m_mainlist.insert(std::make_pair(t->payload->desc, t));
 
     return ret.second;
 }
 
-bool TaskManager::add(POVars& vm)
+int TaskManager::get_highest_task_id()
 {
-    std::shared_ptr<Task> t(new Task);
+#if 1
+    struct MaxValue {
+        MaxValue() : maxValue(0) {}
+        MaxValue(const MaxValue& l) { this->maxValue = l.maxValue; }
+        void operator()(std::pair<const std::string, std::shared_ptr<Task>>& p) {
+            if (p.second->payload->id > maxValue)
+                maxValue = p.second->payload->id;
+        }
+        int maxValue;
+    };
 
-    if (vm.count("pri")) {
-        t->payload->pri = vm["pri"].as<int>();
-    }
-    if (vm.count("desc")) {
-        t->payload->desc = vm["desc"].as<std::string>();
-    } else {
-        return false;
-    }
-
-    //TODO: why clang show error here?
-#if 0
-    m_mainlist.insert(
-                      std::pair<std::string, std::shared_ptr<Task>>(
-                          vm["desc"].as<std::string>(),
-                          t)
-                     );
+    MaxValue fun(std::for_each(m_mainlist.begin(), m_mainlist.end(), MaxValue()));
+    return fun.maxValue;
 #endif
-    m_mainlist.insert(std::make_pair(vm["desc"].as<std::string>(), t));
-
-    return true; //TODO
+    // really, what is the advantage if:
+#if 0
+    int max=0;
+    for (TaskMap::iterator it=m_mainlist.begin(); it!=m_mainlist.end(); ++it)
+        if (it->second->payload->id > max)
+            max = it->second->payload->id;
+    return max;
+#endif
 }
 
-int TaskManager::get_new_task_id()
+bool TaskManager::del(std::shared_ptr<Task>& t)
 {
-    m_task_highest_id += 1;
-    return m_task_highest_id;
+    TaskMap::size_type ret;
+
+    ret = m_mainlist.erase(t->payload->desc);
+
+    assert(ret);
+    return ret;
+}
+
+bool TaskManager::done(std::shared_ptr<Task>& t)
+{
+    t->payload->state = TS_DONE;
 }
 
 int TaskManager::get_default_pri()
@@ -60,7 +77,7 @@ std::shared_ptr<Task> TaskManager::createEmptyTask()
 {
     std::shared_ptr<Task> t(new Task);
 
-    t->payload->id = get_new_task_id();
+    t->payload->id = 0;
     t->payload->pri = get_default_pri();
 
     return t;

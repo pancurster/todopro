@@ -4,33 +4,57 @@
 #include <iostream>
 #include <iomanip>
 
-const char* CliView::K_BOLD="\x1B[1m";
-const char* CliView::K_NO_STYLE="\x1B[0m";
-const char* CliView::K_BLACK_ON_WHITE="\x1B[37;40m";
-const char* CliView::K_WHITE_ON_BLACK="\x1B[30;44m";
+namespace Style {
 
-void CliView::show(TaskMap& tmap) const
+const char* K_BOLD="\x1B[1m";
+const char* K_NO_STYLE="\x1B[0m";
+const char* K_BLACK_ON_WHITE="\x1B[37;40m";
+const char* K_WHITE_ON_BLACK="\x1B[37;44m";
+
+}
+
+namespace Labels {
+
+const char* ID      = "Id";
+const char* PRI     = "Pri";
+const char* STATE   = "State";
+const char* DESC    = "Desc";
+
+const char* STATE_VAL[] ={
+    "",
+    "P",
+    "S",
+    "D"
+};
+}
+
+void CliView::showTask(TaskMap& tmap) const
 {
+    // Print ID Pri and rest label names
     this->print_header();
+
     int color=0;
     for(TaskMap::iterator it=tmap.begin(); it!=tmap.end(); ++it, color^=1) {
 
-        if (color) std::cout << CliView::K_BLACK_ON_WHITE;
-        else       std::cout << CliView::K_WHITE_ON_BLACK;
+        if (color) std::cout << Style::K_BLACK_ON_WHITE;
+        else       std::cout << Style::K_WHITE_ON_BLACK;
 
-        showTask(it->second);
+        show_task_common(it->second.get());
 
-        std::cout << CliView::K_NO_STYLE << "\n";
+        std::cout << Style::K_NO_STYLE << "\n";
     }
     std::cout << "\n";
 }
 
 void CliView::print_header() const
 {
-    std::cout << CliView::K_BOLD;
-    std::cout << std::setw(STYLE_FIELD_WIDTH_ID)    << std::left << "Id";
-    std::cout << std::setw(STYLE_FIELD_WIDTH_PRI)   << std::left << "Pri";
-    std::cout << std::setw(STYLE_FIELD_WIDTH_DESC)  << std::left << "Desc" << CliView::K_NO_STYLE << "\n";
+    std::cout << Style::K_BOLD;
+    std::cout << std::setw(FIELD_WIDTH_ID)    << std::left << Labels::ID;
+    std::cout << std::setw(FIELD_WIDTH_PRI)   << std::left << Labels::PRI;
+    std::cout << std::setw(FIELD_WIDTH_STATE) << std::left << Labels::STATE;
+    std::cout << std::setw(FIELD_WIDTH_DESC)  << std::left << Labels::DESC
+              << Style::K_NO_STYLE
+              << "\n";
 }
 
 void CliView::showTask(std::shared_ptr<Task>& t) const
@@ -43,6 +67,7 @@ void CliView::showTask(Task* t) const
     show_task_common(t);
 }
 
+// TODO Rozwazyc czy nie lepej bylo by zeby ta funkcja zwracala stringa
 void CliView::show_task_common(Task* t) const
 {
 #if 1
@@ -51,15 +76,19 @@ void CliView::show_task_common(Task* t) const
 
     str = std::to_string(t->payload->id);
     len += str.size();
-    std::cout<< std::setw(5)<< std::left << str;
+    std::cout<< std::setw(FIELD_WIDTH_ID)<< std::left << str;
 
     str = std::to_string(t->payload->pri);
     len += str.size();
-    std::cout<< std::setw(5)<< str;
+    std::cout<< std::setw(FIELD_WIDTH_PRI)<< str;
+
+    str = Labels::STATE_VAL[t->payload->state];
+    len += str.size();
+    std::cout<< std::setw(FIELD_WIDTH_STATE)<< str;
 
     str = t->payload->desc;
     len += str.size();
-    std::cout << std::setfill(' ') << std::setw(72) << str;
+    std::cout << std::setfill(' ') << std::setw(FIELD_WIDTH_DESC) << str;
 
 #endif
 #if 0
@@ -69,12 +98,6 @@ void CliView::show_task_common(Task* t) const
     str += t->payload->desc;
     std::cout << str;
     return str.size();
-#endif
-#if 0
-    std::cout
-        << t->payload->id << "   "
-        << t->payload->pri << "   "
-        << t->payload->desc;
 #endif
 #if 0
     static int i=0;
