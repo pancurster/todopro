@@ -12,23 +12,23 @@ SimpleFileFormat::SimpleFileFormat() { }
 
 SimpleFileFormat::~SimpleFileFormat() { }
 
-std::shared_ptr<std::string> SimpleFileFormat::serialize(TaskMap& tvec)
+std::shared_ptr<std::string> SimpleFileFormat::serialize(TaskVec& tvec)
 {
     std::shared_ptr<std::string> image(new std::string);
-    for (TaskMap::iterator it=tvec.begin(); it != tvec.end(); ++it) {
-        *image += std::to_string((it->second)->payload->id);
+    for (TaskVec::iterator it=tvec.begin(); it != tvec.end(); ++it) {
+        *image += std::to_string((*it)->payload->id);
         *image += ":";
-        *image += std::to_string((it->second)->payload->pri);
+        *image += std::to_string((*it)->payload->pri);
         *image += ":";
-        *image += std::to_string((it->second)->payload->state);
+        *image += std::to_string((*it)->payload->state);
         *image += ":";
-        *image += (it->second)->payload->desc;
+        *image += (*it)->payload->desc;
         *image += ";\n";
     }
     return image;
 }
 
-void SimpleFileFormat::deserialize(std::string& image, TaskMap& tmap)
+void SimpleFileFormat::deserialize(std::string& image, TaskVec& tvec)
 {
     std::shared_ptr<Task> t;
     std::string line;
@@ -41,7 +41,7 @@ void SimpleFileFormat::deserialize(std::string& image, TaskMap& tmap)
         line = image.substr(s, len);
 
         t = deserialize_line(line); //XXX
-        tmap.insert(std::pair<std::string, std::shared_ptr<Task>>(t->payload->desc, t));
+        tvec.push_back(t);
 
         s = e + strlen(";\n");
     }

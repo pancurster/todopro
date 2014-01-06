@@ -13,10 +13,30 @@ typedef std::map<std::string, std::shared_ptr<Task>>    TaskMap;
 template <class KEY>
 class TaskMapFabric : public std::map<KEY, std::shared_ptr<Task>> {
 public:
+    TaskMapFabric(std::string fieldtype)
+        : std::map<KEY, std::shared_ptr<Task>>()
+        , fieldtype(fieldtype)
+    { }
     void fillFromVec(TaskVec& tv)
     {
-        //but how to make to know what filed in task payload type will
-        //be a key value ?
+        for (TaskVec::iterator it=tv.begin(); it != tv.end(); ++it) {
+            insert(make_pair(getKeyValue(it), *it));
+        }
+    }
+private:
+    std::string fieldtype;
+    KEY getKeyValue(TaskVec::iterator& it)
+    {
+        if (fieldtype == "id")
+            return (*it)->payload->id;
+        if (fieldtype == "pri")
+            return (*it)->payload->pri;
+        if (fieldtype == "desc")
+            return (*it)->payload->desc;
+        if (fieldtype == "state")
+            return (*it)->payload->state;
+
+        // TODO add here static assertion
     }
 };
 

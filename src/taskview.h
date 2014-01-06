@@ -7,12 +7,12 @@
 
 class TaskView {
 public:
-    virtual void showTask(TaskMap&) const = 0;
+    virtual void showTask(TaskVec&) const = 0;
 };
 
 class CliView : public TaskView {
 public:
-    void showTask(TaskMap& tmap) const;
+    void showTask(TaskVec& tvec) const;
     void showTask(std::shared_ptr<Task>& t) const;
     void showTask(Task* t) const;
 

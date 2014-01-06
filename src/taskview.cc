@@ -29,18 +29,18 @@ const char* STATE_VAL[] ={
 };
 }
 
-void CliView::showTask(TaskMap& tmap) const
+void CliView::showTask(TaskVec& tvec) const
 {
     // Print ID Pri and rest label names
     this->print_header();
 
     int color=0;
-    for(TaskMap::iterator it=tmap.begin(); it!=tmap.end(); ++it, color^=1) {
+    for(TaskVec::iterator it=tvec.begin(); it!=tvec.end(); ++it, color^=1) {
 
         if (color) std::cout << Style::K_BLACK_ON_WHITE;
         else       std::cout << Style::K_WHITE_ON_BLACK;
 
-        show_task_common(it->second.get());
+        show_task_common(it->get());
 
         std::cout << Style::K_NO_STYLE << "\n";
     }

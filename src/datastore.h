@@ -14,8 +14,8 @@ public:
     DataStore();
     ~DataStore();
 
-    bool save(const std::string& filename, TaskMap& task_container);
-    bool load(const std::string& filename, TaskMap& task_container);
+    bool save(const std::string& filename, TaskVec& task_container);
+    bool load(const std::string& filename, TaskVec& task_container);
     bool export_data();
 
 private:
@@ -35,7 +35,7 @@ DataStore<T>::~DataStore() { }
 
 
 template <class T>
-bool DataStore<T>::save(const std::string& filename, TaskMap& task_container)
+bool DataStore<T>::save(const std::string& filename, TaskVec& task_container)
 {
     std::shared_ptr<std::string> serout = file_format->serialize(task_container);
     save_to_file(filename, *serout);
@@ -44,7 +44,7 @@ bool DataStore<T>::save(const std::string& filename, TaskMap& task_container)
 
 
 template <class T>
-bool DataStore<T>::load(const std::string& filename, TaskMap& task_container)
+bool DataStore<T>::load(const std::string& filename, TaskVec& task_container)
 {
     std::string image;
 

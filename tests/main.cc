@@ -71,14 +71,14 @@ BOOST_AUTO_TEST_CASE(File_saving)
     t->payload->id = 1;
     t->payload->pri = 3;
     t->payload->desc = "Very important task";
-    TaskMap tmap;
-    tmap.insert(std::pair<std::string, std::shared_ptr<Task>>(t->payload->desc, t));
-    BOOST_CHECK_EQUAL(tmap.size(), 1);
+    TaskVec tvec;
+    tvec.push_back(t);
+    BOOST_CHECK_EQUAL(tvec.size(), 1);
     DataStore<SimpleFileFormat> dstore;
-    dstore.save("test.db", tmap);
-    TaskMap tinmap;
-    dstore.load("test.db", tinmap);
-    BOOST_CHECK_EQUAL(tinmap.size(), 1);
+    dstore.save("test.db", tvec);
+    TaskVec tinvec;
+    dstore.load("test.db", tinvec);
+    BOOST_CHECK_EQUAL(tinvec.size(), 1);
 }
 
 BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(failure_test, 2)

@@ -44,7 +44,7 @@ ToDoPro::~ToDoPro() { }
 void ToDoPro::load()
 {
     DataStore<SimpleFileFormat> dstore;
-    dstore.load("test.db", taskmanager->taskbydesc);
+    dstore.load("test.db", taskmanager->taskmain);
 }
 
 //
@@ -124,13 +124,13 @@ void ToDoPro::commands(int ac, char* av[])
     if (temptask) {
         view->showTask(temptask);
     } else {
-        view->showTask(taskmanager->taskbydesc);
+        view->showTask(taskmanager->taskmain);
     }
 }
 
 void ToDoPro::save()
 {
     DataStore<SimpleFileFormat> dstore;
-    dstore.save("test.db", taskmanager->taskbydesc);
+    dstore.save("test.db", taskmanager->taskmain);
 }
 

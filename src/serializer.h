@@ -13,8 +13,8 @@ class Task;
 class FileFormatInterface {
 public:
     virtual ~FileFormatInterface() {};
-    virtual std::shared_ptr<std::string> serialize(TaskMap&) = 0;
-    virtual void deserialize(std::string&, TaskMap&) = 0;
+    virtual std::shared_ptr<std::string> serialize(TaskVec&) = 0;
+    virtual void deserialize(std::string&, TaskVec&) = 0;
 };
 
 /*
@@ -24,8 +24,8 @@ class SimpleFileFormat : public FileFormatInterface {
 public:
     SimpleFileFormat ();
     ~SimpleFileFormat();
-    std::shared_ptr<std::string> serialize(TaskMap&);
-    void deserialize(std::string&, TaskMap&);
+    std::shared_ptr<std::string> serialize(TaskVec&);
+    void deserialize(std::string&, TaskVec&);
 private:
     std::shared_ptr<Task> deserialize_line(std::string& line);
 };
