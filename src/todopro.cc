@@ -44,7 +44,7 @@ ToDoPro::~ToDoPro() { }
 void ToDoPro::load()
 {
     DataStore<SimpleFileFormat> dstore;
-    dstore.load("test.db", taskmanager->m_mainlist);
+    dstore.load("test.db", taskmanager->taskbydesc);
 }
 
 //
@@ -69,16 +69,25 @@ void ToDoPro::commands(int ac, char* av[])
 
     // CREATE/SELECT
     if (vm.count("select")) {
-        // Traktujemy wzorzec jako pelny klucz.
-        // Jesli to nie daje rezultatu to szukamy jako czesc reprezentacji klucza
-        temptask = taskmanager->findByDesc(vm["select"].as<std::string>());
-        if (temptask == 0) {
-            temptask = taskmanager->findByDescPartial(vm["select"].as<std::string>());
-        }
-        if (temptask == 0) {
-            std::cout<<"Not found\n";
-            return;
-        }
+
+        // 1) Try select by ID
+        // 2) Try select by desc (parameter is whole key)
+        // 3) Try select by desc (parameter is substr of key)
+        do {
+            std::string arg = vm["select"].as<std::string>();
+
+            if (temptask = taskmanager->findById(arg))
+                break;
+            if (temptask = taskmanager->findByDesc(arg))
+                break;
+            if (temptask = taskmanager->findByDescPartial(arg))
+                break;
+
+            if (temptask == 0) {
+                std::cout<<"Not found\n";
+                return;
+            }
+        } while (0);
     } else if (vm.count("new")) {
         std::cout<<"Creating empty task... ";
         temptask = taskmanager->createEmptyTask();
@@ -115,13 +124,13 @@ void ToDoPro::commands(int ac, char* av[])
     if (temptask) {
         view->showTask(temptask);
     } else {
-        view->showTask(taskmanager->m_mainlist);
+        view->showTask(taskmanager->taskbydesc);
     }
 }
 
 void ToDoPro::save()
 {
     DataStore<SimpleFileFormat> dstore;
-    dstore.save("test.db", taskmanager->m_mainlist);
+    dstore.save("test.db", taskmanager->taskbydesc);
 }
 
