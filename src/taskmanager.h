@@ -13,14 +13,14 @@ typedef std::map<std::string, std::shared_ptr<Task>>    TaskMap;
 template <class KEY>
 class TaskMapFabric : public std::map<KEY, std::shared_ptr<Task>> {
 public:
-    TaskMapFabric(std::string fieldtype)
+    TaskMapFabric()
         : std::map<KEY, std::shared_ptr<Task>>()
-        , fieldtype(fieldtype)
+        , fieldtype("id")
     { }
     void fillFromVec(TaskVec& tv)
     {
         for (TaskVec::iterator it=tv.begin(); it != tv.end(); ++it) {
-            insert(make_pair(getKeyValue(it), *it));
+            this->insert(make_pair(getKeyValue(it), *it));
         }
     }
 private:
@@ -31,11 +31,12 @@ private:
             return (*it)->payload->id;
         if (fieldtype == "pri")
             return (*it)->payload->pri;
-        if (fieldtype == "desc")
-            return (*it)->payload->desc;
+        //if (fieldtype == "desc")
+            //return (*it)->payload->desc;
         if (fieldtype == "state")
             return (*it)->payload->state;
 
+        return 0;
         // TODO add here static assertion
     }
 };
@@ -88,8 +89,9 @@ public:
 
     // We use strategy "be lazy", what mean, we will fill
     // more smart containers only when they are needed.
+    TaskMapFabric<int> taskbyid;
     TaskMapByDesc   taskbydesc;
-    TaskMapById     taskbyid;
+    //TaskMapById     taskbyid;
 
 private:
     TaskManager(const TaskManager&);
