@@ -11,9 +11,6 @@
 class SerDes;
 class Task;
 
-typedef std::vector<std::shared_ptr<Task>> TaskVec;
-typedef std::map<std::string, std::shared_ptr<Task>> TaskMap;
-
 enum {
     TASK_DESC_FIELDS=6,
     TASK_MAX_DESC_CHARACTERS=120

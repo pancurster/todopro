@@ -22,7 +22,7 @@ bool TaskManager::add(std::shared_ptr<Task>& t)
     t->payload->id = get_highest_task_id() + 1;
 
     std::pair<TaskMap::iterator, bool> ret = 
-        m_mainlist.insert(std::make_pair(t->payload->desc, t));
+        taskbydesc.insert(std::make_pair(t->payload->desc, t));
 
     return ret.second;
 }
@@ -40,13 +40,13 @@ int TaskManager::get_highest_task_id()
         int maxValue;
     };
 
-    MaxValue fun(std::for_each(m_mainlist.begin(), m_mainlist.end(), MaxValue()));
+    MaxValue fun(std::for_each(taskbydesc.begin(), taskbydesc.end(), MaxValue()));
     return fun.maxValue;
 #endif
     // really, what is the advantage if:
 #if 0
     int max=0;
-    for (TaskMap::iterator it=m_mainlist.begin(); it!=m_mainlist.end(); ++it)
+    for (TaskMap::iterator it=taskbydesc.begin(); it!=taskbydesc.end(); ++it)
         if (it->second->payload->id > max)
             max = it->second->payload->id;
     return max;
@@ -57,7 +57,7 @@ bool TaskManager::del(std::shared_ptr<Task>& t)
 {
     TaskMap::size_type ret;
 
-    ret = m_mainlist.erase(t->payload->desc);
+    ret = taskbydesc.erase(t->payload->desc);
 
     assert(ret);
     return ret;
@@ -66,6 +66,7 @@ bool TaskManager::del(std::shared_ptr<Task>& t)
 bool TaskManager::done(std::shared_ptr<Task>& t)
 {
     t->payload->state = TS_DONE;
+    return true;
 }
 
 int TaskManager::get_default_pri()
@@ -86,9 +87,9 @@ std::shared_ptr<Task> TaskManager::createEmptyTask()
 std::shared_ptr<Task> TaskManager::findByDesc(std::string desc)
 {
     TaskMap::iterator task_item_it;
-    task_item_it = m_mainlist.find(desc);
+    task_item_it = taskbydesc.find(desc);
 
-    if (task_item_it != m_mainlist.end()) {
+    if (task_item_it != taskbydesc.end()) {
         return task_item_it->second;
     } else {
         return 0;
@@ -99,7 +100,7 @@ std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
 {
     //TODO chyba trzeba zastosowac wlasna funkcje compare zeby to bylo szybkie
     std::string key;
-    for (TaskMap::iterator it=m_mainlist.begin(); it != m_mainlist.end(); ++it) {
+    for (TaskMap::iterator it=taskbydesc.begin(); it != taskbydesc.end(); ++it) {
         key = it->first;
         if (key.find(descpart) != std::string::npos)
             return it->second;
@@ -107,4 +108,20 @@ std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
     return 0;
 }
 
+std::shared_ptr<Task> TaskManager::findById(std::string id)
+{
+    if (std::isdigit(id.c_str()[0])) {
+        int num = std::atoi(id.c_str());
+        return findById(num);
+    }
+    return 0;
+}
+
+std::shared_ptr<Task> TaskManager::findById(int id)
+{
+    if (taskbyid.size() == 0) {
+        taskbyid.fillFromVec(taskmain);
+    }
+    return taskbyid[id];
+}
 

@@ -1,10 +1,9 @@
 #ifndef SERIALIZER_H
 #define SERIALIZER_H
 
+#include "taskmanager.h"
 #include <string>
 #include <vector>
-
-#include "task.h"
 
 class Task;
 

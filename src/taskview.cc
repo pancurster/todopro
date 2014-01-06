@@ -1,4 +1,5 @@
 #include "taskview.h"
+#include "taskmanager.h" //TaskMap
 #include "task.h"
 
 #include <iostream>

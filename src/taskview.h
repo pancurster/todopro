@@ -2,6 +2,8 @@
 #define TASKVIEW_H
 
 #include "task.h"
+#include "taskmanager.h"
+//class TaskMap; //TODO
 
 class TaskView {
 public:
