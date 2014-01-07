@@ -89,9 +89,9 @@ public:
 
     // We use strategy "be lazy", what mean, we will fill
     // more smart containers only when they are needed.
-    TaskMapFabric<int> taskbyid;
     TaskMapByDesc   taskbydesc;
-    //TaskMapById     taskbyid;
+    TaskMapById     taskbyid;
+    //TaskMapFabric<int> taskbyid;
 
 private:
     TaskManager(const TaskManager&);

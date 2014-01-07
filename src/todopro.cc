@@ -120,6 +120,11 @@ void ToDoPro::commands(int ac, char* av[])
         taskmanager->done(temptask);
     }
 
+    if (vm.count("deadline")) {
+        //std::string tm = vm["deadline"].as<std::string>();
+        // TODO
+    }
+
     // VIEW
     if (temptask) {
         view->showTask(temptask);

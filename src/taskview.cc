@@ -61,11 +61,13 @@ void CliView::print_header() const
 void CliView::showTask(std::shared_ptr<Task>& t) const
 {
     show_task_common(t.get());
+    std::cout << "\n";
 }
 
 void CliView::showTask(Task* t) const
 {
     show_task_common(t);
+    std::cout << "\n";
 }
 
 // TODO Rozwazyc czy nie lepej bylo by zeby ta funkcja zwracala stringa

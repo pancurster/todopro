@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <ctime>
 
 
 class SerDes;
@@ -41,6 +42,8 @@ public:
         std::string         desc;
         TaskState           state;
         std::list<Task*>    recurent_task;
+        std::time_t         start_time;
+        std::time_t         end_time;
     }* payload;
 
 private:
