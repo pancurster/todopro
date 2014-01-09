@@ -17,8 +17,11 @@ public:
     // Przekazujemy kontener taskow bo byc moze format pliku
     // potrzebowal bedzie calego zestawu taskow przy serializacji,
     // np. wypisanie na poczatku liczby wszystkich taskow itp.
+    // @ret: serialized tasks
     virtual std::string serialize(const TaskVec&) = 0;
-    virtual void deserialize(std::string&, TaskVec&) = 0;
+
+    // @ret: task parsed
+    virtual int deserialize(std::string&, TaskVec&) = 0;
 };
 
 /*
@@ -29,9 +32,10 @@ public:
     SimpleFileFormat ();
     ~SimpleFileFormat();
     std::string serialize(const TaskVec&);
-    void deserialize(std::string&, TaskVec&);
+    int deserialize(std::string&, TaskVec&);
 private:
-    std::shared_ptr<Task> deserialize_line(std::string& line);
+    // @ret: sp to deserialized task, 0 - in case of error
+    std::shared_ptr<Task> deserialize_single_task(std::string& line);
 };
 
 class JSONFileFormat : public FileFormatInterface {
