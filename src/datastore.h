@@ -16,13 +16,14 @@ public:
 
     bool save(const std::string& filename, TaskVec& task_container);
     bool load(const std::string& filename, TaskVec& task_container);
-    bool export_data();
+    FileFormatInterface* getFFObj();
+    FileFormatInterface* setFFObj(FileFormatInterface* f);
 
 private:
     bool save_to_file(const std::string& filename, std::string in_buff);
     bool read_from_file(const std::string& filename, std::string& image);
 
-    std::shared_ptr<FileFormatInterface> file_format;
+    FileFormatInterface* file_format;
 };
 
 template <class T>
@@ -31,7 +32,10 @@ DataStore<T>::DataStore()
 
 
 template <class T>
-DataStore<T>::~DataStore() { }
+DataStore<T>::~DataStore()
+{
+    delete file_format;
+}
 
 
 template <class T>
@@ -53,12 +57,18 @@ bool DataStore<T>::load(const std::string& filename, TaskVec& task_container)
     return true; //TODO
 }
 
+template <class T>
+FileFormatInterface* DataStore<T>::getFFObj()
+{
+    return file_format;
+}
 
 template <class T>
-bool DataStore<T>::export_data()
+FileFormatInterface* DataStore<T>::setFFObj(FileFormatInterface* f)
 {
-    //TODO
-    return false;
+    delete file_format;
+    file_format = f;
+    return file_format;
 }
 
 
@@ -88,6 +98,7 @@ bool DataStore<T>::read_from_file(const std::string& filename, std::string& imag
     file.seekg(0, file.beg);
     char* buf = new char[len+1];
     file.read(buf, len);
+    file.close();
     image = buf;
     delete[] buf;
     return true;

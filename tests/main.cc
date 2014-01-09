@@ -11,6 +11,7 @@
 
 #include "simplefileformat.test.cc"
 #include "taskmanager.test.cc"
+#include "datastore.test.cc"
 /*
  * BOOST_CHECK( add( 2,2 ) == 4 );        // #1 continues on error
  * BOOST_REQUIRE( add( 2,2 ) == 4 );      // #2 throws on error
@@ -31,28 +32,6 @@ struct MyFixture {
     }
     ToDoPro* tdp;
 };
-
-/*
-struct TaskFixture {
-    TaskFixture()
-        : t1(new Task)
-    {
-        BOOST_TEST_MESSAGE("setup TaskFixture");
-
-        t1->payload->id  = 1;
-        t1->payload->pri = 1;
-        t1->payload->type = TT_TASK;
-        t1->payload->desc = "Very important task";
-    };
-
-    ~TaskFixture() {
-        BOOST_TEST_MESSAGE("cleaning TaskFixture");
-        delete t1;
-    };
-
-    Task* t1;
-};
-*/
 
 BOOST_AUTO_TEST_SUITE(example_must);
 
