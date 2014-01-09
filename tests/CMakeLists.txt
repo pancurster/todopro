@@ -34,22 +34,26 @@ set_target_properties(system_under_test # <- add implementation libs here #
                LINK_FLAGS "-coverage"
 )
 
+AUX_SOURCE_DIRECTORY(fixtures FIXTURESRC)
+add_library(fixturki ${FIXTURESRC})
+
+#jak to zrobic w jakies petli?
 add_executable(${CMAKE_PROJECT_NAME} main.cc)
+add_executable(serializer serializer.test.cc)
+add_executable(taskmanager taskmanager.test.cc)
 
 
-target_link_libraries(${CMAKE_PROJECT_NAME} 
-    ${Boost_LIBRARIES}
-    system_under_test
-    ############################
-    # add production libs here #
-    ############################
-)
+target_link_libraries(${CMAKE_PROJECT_NAME} ${Boost_LIBRARIES} system_under_test fixturki)
+target_link_libraries(serializer ${Boost_LIBRARIES} system_under_test fixturki)
+target_link_libraries(taskmanager ${Boost_LIBRARIES} system_under_test fixturki)
 
 
 # helpers
 
 add_custom_target(run
     COMMAND ${CMAKE_PROJECT_NAME}
+    COMMAND serializer
+    COMMAND taskmanager
 )
 
 add_custom_target(coverage

@@ -9,9 +9,6 @@
 #include "../src/poparser.h"
 #include "../src/datastore.h"
 
-// Other tests
-#include "taskmanager.test.cc"
-
 /*
  * BOOST_CHECK( add( 2,2 ) == 4 );        // #1 continues on error
  * BOOST_REQUIRE( add( 2,2 ) == 4 );      // #2 throws on error
