@@ -13,7 +13,7 @@ class SerDes;
 class Task;
 
 enum {
-    TASK_DESC_FIELDS=6,
+    TASK_DESC_FIELDS=5,
     TASK_MAX_DESC_CHARACTERS=120
 };
 
