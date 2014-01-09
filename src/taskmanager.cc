@@ -28,7 +28,6 @@ bool TaskManager::add(std::shared_ptr<Task>& t)
 
 int TaskManager::get_highest_task_id()
 {
-#if 1
     struct MaxValue {
         MaxValue() : maxValue(0) {}
         MaxValue(const MaxValue& l) { this->maxValue = l.maxValue; }
@@ -41,15 +40,6 @@ int TaskManager::get_highest_task_id()
 
     MaxValue fun(std::for_each(taskmain.begin(), taskmain.end(), MaxValue()));
     return fun.maxValue;
-#endif
-    // really, what is the advantage if:
-#if 0
-    int max=0;
-    for (TaskVec::iterator it=taskmain.begin(); it!=taskmain.end(); ++it)
-        if (it->second->payload->id > max)
-            max = it->second->payload->id;
-    return max;
-#endif
 }
 
 bool TaskManager::del(std::shared_ptr<Task>& t)

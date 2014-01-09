@@ -13,6 +13,10 @@ class Task;
 class FileFormatInterface {
 public:
     virtual ~FileFormatInterface() {};
+    
+    // Przekazujemy kontener taskow bo byc moze format pliku
+    // potrzebowal bedzie calego zestawu taskow przy serializacji,
+    // np. wypisanie na poczatku liczby wszystkich taskow itp.
     virtual std::shared_ptr<std::string> serialize(TaskVec&) = 0;
     virtual void deserialize(std::string&, TaskVec&) = 0;
 };

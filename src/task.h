@@ -41,9 +41,9 @@ public:
         TaskType            type;
         std::string         desc;
         TaskState           state;
-        std::list<Task*>    recurent_task;
         std::time_t         start_time;
         std::time_t         end_time;
+        std::list<std::shared_ptr<Task>> recurent_task;
     }* payload;
 
 private:
