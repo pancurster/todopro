@@ -37,8 +37,8 @@ DataStore<T>::~DataStore() { }
 template <class T>
 bool DataStore<T>::save(const std::string& filename, TaskVec& task_container)
 {
-    std::shared_ptr<std::string> serout = file_format->serialize(task_container);
-    save_to_file(filename, *serout);
+    std::string serout = file_format->serialize(task_container);
+    save_to_file(filename, serout);
     return true; //TODO
 }
 

@@ -17,7 +17,7 @@ public:
     // Przekazujemy kontener taskow bo byc moze format pliku
     // potrzebowal bedzie calego zestawu taskow przy serializacji,
     // np. wypisanie na poczatku liczby wszystkich taskow itp.
-    virtual std::shared_ptr<std::string> serialize(TaskVec&) = 0;
+    virtual std::string serialize(const TaskVec&) = 0;
     virtual void deserialize(std::string&, TaskVec&) = 0;
 };
 
@@ -28,7 +28,7 @@ class SimpleFileFormat : public FileFormatInterface {
 public:
     SimpleFileFormat ();
     ~SimpleFileFormat();
-    std::shared_ptr<std::string> serialize(TaskVec&);
+    std::string serialize(const TaskVec&);
     void deserialize(std::string&, TaskVec&);
 private:
     std::shared_ptr<Task> deserialize_line(std::string& line);

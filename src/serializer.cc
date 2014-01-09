@@ -12,18 +12,18 @@ SimpleFileFormat::SimpleFileFormat() { }
 
 SimpleFileFormat::~SimpleFileFormat() { }
 
-std::shared_ptr<std::string> SimpleFileFormat::serialize(TaskVec& tvec)
+std::string SimpleFileFormat::serialize(const TaskVec& tvec)
 {
-    std::shared_ptr<std::string> image(new std::string);
-    for (TaskVec::iterator it=tvec.begin(); it != tvec.end(); ++it) {
-        *image += std::to_string((*it)->payload->id);
-        *image += ":";
-        *image += std::to_string((*it)->payload->pri);
-        *image += ":";
-        *image += std::to_string((*it)->payload->state);
-        *image += ":";
-        *image += (*it)->payload->desc;
-        *image += ";\n";
+    std::string image;
+    for (TaskVec::const_iterator it=tvec.begin(); it != tvec.end(); ++it) {
+        image += std::to_string((*it)->payload->id);
+        image += ":";
+        image += std::to_string((*it)->payload->pri);
+        image += ":";
+        image += std::to_string((*it)->payload->state);
+        image += ":";
+        image += (*it)->payload->desc;
+        image += ";\n";
     }
     return image;
 }
