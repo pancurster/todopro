@@ -44,13 +44,14 @@ int SimpleFileFormat::deserialize(std::string& image, TaskVec& tvec)
         line = image.substr(s, len);
 
         t = deserialize_single_task(line);
-        if (t)
+        if (t) {
             tvec.push_back(t);
-        else
+            task_parsed += 1;
+        } else {
             std::cerr << "Corrupted task\n";
+        }
 
         s = e + strlen(";\n");
-        task_parsed += 1;
     }
     return task_parsed;
 }
@@ -70,29 +71,33 @@ std::shared_ptr<Task> SimpleFileFormat::deserialize_single_task(std::string& lin
         strcpy(buf, line.substr(s, e).c_str());
         sscanf(buf, "%d", &t->payload->id);
         s = e + 1;
+
         // PRI
         if ((e = line.find(":", s)) == std::string::npos)
             break;
         strcpy(buf, line.substr(s, e).c_str());
         sscanf(buf, "%d", &t->payload->pri);
         s = e + 1;
+
         // TYPE
         if ((e = line.find(":", s)) == std::string::npos)
             break;
         strcpy(buf, line.substr(s, e).c_str());
         sscanf(buf, "%d", reinterpret_cast<int*>(&t->payload->type));
         s = e + 1;
+
         // STATE
         if ((e = line.find(":", s)) == std::string::npos)
             break;
         strcpy(buf, line.substr(s, e).c_str());
         sscanf(buf, "%d", reinterpret_cast<int*>(&t->payload->state));
         s = e + 1;
+
         // DESC
-        // Don't miss the '!=' here
-        if ((e = line.find(";", s)) != std::string::npos)
-            break;
+        e = line.find(";", s);  // mamy gwarancje ze linijka jest prawidlowo zakonczona
         t->payload->desc = line.substr(s, e);
+        if (t->payload->desc.size() < 1)
+            break;
         s = e + 1;
 
         parsing_success = true;
@@ -101,7 +106,7 @@ std::shared_ptr<Task> SimpleFileFormat::deserialize_single_task(std::string& lin
     if (parsing_success) {
         return t;
     } else {
-        std::cerr << "Error parsing line:\n   " << line << "\n";
+        std::cerr << "Error parsing line: " << line << "\n";
         return 0;
     }
 }
