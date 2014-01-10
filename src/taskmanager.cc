@@ -64,7 +64,7 @@ bool TaskManager::done(std::shared_ptr<Task>& t)
 
 int TaskManager::get_default_pri()
 {
-    return DEFAULT_PRI;
+    return Task::DEFAULT_PRI;
 }
 
 std::shared_ptr<Task> TaskManager::createEmptyTask()
@@ -91,7 +91,7 @@ std::shared_ptr<Task> TaskManager::select(std::string key)
         if (temptask = findByDescPartial(key))
             break;
     } while (0);
-
+    // TODO wystarczy return temptask;
     if (temptask )
         return temptask;
     return 0;

@@ -11,7 +11,7 @@
 #include <iostream>
 #include <memory>
 
-const char* ToDoPro::VERSION="0.0.1";
+const char* ToDoPro::VERSION="0.0.2";
 
 int main(int argc, char* argv[])
 {
@@ -38,7 +38,11 @@ ToDoPro::ToDoPro()
     : taskmanager(new TaskManager)
     , view(new CliView) { }
 
-ToDoPro::~ToDoPro() { }
+ToDoPro::~ToDoPro()
+{
+    delete view;
+    delete taskmanager;
+}
 
 
 void ToDoPro::load()
@@ -56,7 +60,6 @@ void ToDoPro::commands(int ac, char* av[])
 {
     POParser vm(ac, av);
     std::shared_ptr<Task> temptask;
-    bool new_task_ready_to_add = false;
 
     if (vm.count("help")) {
         std::cout << vm.all << std::endl;

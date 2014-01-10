@@ -7,6 +7,7 @@
 
 class TaskView {
 public:
+    virtual ~TaskView() {}
     virtual void showTask(TaskVec&) const = 0;
 };
 

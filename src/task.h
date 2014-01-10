@@ -21,7 +21,8 @@ public:
         TASK_DESC_FIELDS    = 5,
         MAX_DESC_CHARACTERS = 120,
         NOT_PROPER_ID       = -1,
-        NOT_PROPER_PRI      = -1
+        NOT_PROPER_PRI      = -1,
+        DEFAULT_PRI         = 0
     };
     enum TaskState {
         STATE_NOT_SET = 0,
