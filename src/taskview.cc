@@ -73,7 +73,6 @@ void CliView::showTask(Task* t) const
 // TODO Rozwazyc czy nie lepej bylo by zeby ta funkcja zwracala stringa
 void CliView::show_task_common(Task* t) const
 {
-#if 1
     ssize_t len=0;
     std::string str = "";
 
@@ -92,24 +91,5 @@ void CliView::show_task_common(Task* t) const
     str = t->payload->desc;
     len += str.size();
     std::cout << std::setfill(' ') << std::setw(FIELD_WIDTH_DESC) << str;
-
-#endif
-#if 0
-    std::string str = "";
-    str += std::to_string(t->payload->id) += "   ";
-    str += std::to_string(t->payload->pri) += "   ";
-    str += t->payload->desc;
-    std::cout << str;
-    return str.size();
-#endif
-#if 0
-    static int i=0;
-    if (i)
-        printf("\x1B[37;40m" "%d   %d   %s\x1B[0m\n",t->payload->id, t->payload->pri, t->payload->desc.c_str());
-    else
-        printf("\x1B[30;47m" "%d   %d   %s\x1B[0m\n",t->payload->id, t->payload->pri, t->payload->desc.c_str());
-
-    i ^= 1;
-#endif
 }
 

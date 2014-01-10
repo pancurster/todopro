@@ -17,7 +17,6 @@ public:
     bool save(const std::string& filename, TaskVec& task_container);
     bool load(const std::string& filename, TaskVec& task_container);
     FileFormatInterface* getFFObj();
-    FileFormatInterface* setFFObj(FileFormatInterface* f);
 
 private:
     bool save_to_file(const std::string& filename, std::string in_buff);
@@ -28,7 +27,9 @@ private:
 
 template <class T>
 DataStore<T>::DataStore()
-    : file_format(new T) { }
+    : file_format(new T)
+{
+}
 
 
 template <class T>
@@ -63,14 +64,6 @@ FileFormatInterface* DataStore<T>::getFFObj()
     return file_format;
 }
 
-template <class T>
-FileFormatInterface* DataStore<T>::setFFObj(FileFormatInterface* f)
-{
-    delete file_format;
-    file_format = f;
-    return file_format;
-}
-
 
 template <class T>
 bool DataStore<T>::save_to_file(const std::string& filename, std::string in_buff)
@@ -87,18 +80,27 @@ template <class T>
 bool DataStore<T>::read_from_file(const std::string& filename, std::string& image)
 {
     std::ifstream file;
+
     file.open(filename, std::ifstream::in);
+
     if (!file.good()) {
         std::cout << "No file\n";
         image = "";
         return true;
     }
+    // Find how much characters in file
     file.seekg(0, file.end);
     int len = file.tellg();
     file.seekg(0, file.beg);
+
+    // Prepare buffer...
     char* buf = new char[len+1];
+    memset(buf, 0, len+1);
+    // and read to it
     file.read(buf, len);
+
     file.close();
+
     image = buf;
     delete[] buf;
     return true;
