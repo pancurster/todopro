@@ -69,57 +69,28 @@ void ToDoPro::commands(int ac, char* av[])
 
     // CREATE/SELECT
     if (vm.count("select")) {
+        std::string arg = vm["select"].as<std::string>();
+        temptask = taskmanager->select(arg);
 
-        // 1) Try select by ID
-        // 2) Try select by desc (parameter is whole key)
-        // 3) Try select by desc (parameter is substr of key)
-        do {
-            std::string arg = vm["select"].as<std::string>();
-
-            if (temptask = taskmanager->findById(arg))
-                break;
-            if (temptask = taskmanager->findByDesc(arg))
-                break;
-            if (temptask = taskmanager->findByDescPartial(arg))
-                break;
-
-            if (temptask == 0) {
-                std::cout<<"Not found\n";
-                return;
-            }
-        } while (0);
     } else if (vm.count("new")) {
-        std::cout<<"Creating empty task... ";
-        temptask = taskmanager->createEmptyTask();
-        temptask->payload->desc = vm["new"].as<std::string>();
-        new_task_ready_to_add = true;
-        std::cout<<"done\n";
+        std::string arg = vm["new"].as<std::string>();
+        temptask = taskmanager->create(arg);
+        taskmanager->add(temptask);
     }
 
     // MODIFY
     if (vm.count("pri")) {
         temptask->payload->pri = vm["pri"].as<int>();
     }
-
     if (vm.count("desc")) {
-        std::cout<<"Setting desc... ";
         temptask->payload->desc = vm["desc"].as<std::string>();
-        std::cout<<"done\n";
     }
-
-    if (new_task_ready_to_add) {
-        std::cout<<"adding new task\n";
-        taskmanager->add(temptask);
-    }
-
     if (vm.count("remove")) {
         taskmanager->del(temptask);
     }
-
     if (vm.count("done")) {
         taskmanager->done(temptask);
     }
-
     if (vm.count("deadline")) {
         //std::string tm = vm["deadline"].as<std::string>();
         // TODO
@@ -128,6 +99,7 @@ void ToDoPro::commands(int ac, char* av[])
     // VIEW
     if (temptask) {
         view->showTask(temptask);
+
     } else {
         view->showTask(taskmanager->taskmain);
     }

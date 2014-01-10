@@ -79,7 +79,8 @@ public:
     std::shared_ptr<Task> findById(std::string id);
     std::shared_ptr<Task> findById(int id);
     std::shared_ptr<Task> createEmptyTask();
-
+    std::shared_ptr<Task> select(std::string key);
+    std::shared_ptr<Task> create(std::string desc);
     // The 'taskmain' is:
     // - base container for tasks. 
     // - fast so fit well to just show list of tasks, what is most often use case.

@@ -77,6 +77,36 @@ std::shared_ptr<Task> TaskManager::createEmptyTask()
     return t;
 }
 
+std::shared_ptr<Task> TaskManager::select(std::string key)
+{
+    // 1) Try select by ID
+    // 2) Try select by desc (parameter is whole key)
+    // 3) Try select by desc (parameter is substr of key)
+    std::shared_ptr<Task> temptask(0);
+    do {
+        if (temptask = findById(key))
+            break;
+        if (temptask = findByDesc(key))
+            break;
+        if (temptask = findByDescPartial(key))
+            break;
+    } while (0);
+
+    if (temptask )
+        return temptask;
+    return 0;
+}
+
+std::shared_ptr<Task> TaskManager::create(std::string desc)
+{
+    std::shared_ptr<Task> temptask(0);
+
+    temptask = createEmptyTask();
+    temptask->payload->desc = desc;
+
+    return temptask;
+}
+
 std::shared_ptr<Task> TaskManager::findByDesc(std::string desc)
 {
     if (taskbydesc.size() == 0) {
