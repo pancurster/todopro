@@ -8,19 +8,13 @@
 #include "../src/todopro.h"
 #include "../src/poparser.h"
 #include "../src/datastore.h"
+#include "../src/taskview.h"
 
 #include "simplefileformat.test.cc"
 #include "taskmanager.test.cc"
 #include "datastore.test.cc"
 #include "task.test.cc"
-/*
- * BOOST_CHECK( add( 2,2 ) == 4 );        // #1 continues on error
- * BOOST_REQUIRE( add( 2,2 ) == 4 );      // #2 throws on error
- *  if( add( 2,2 ) != 4 )
- *      BOOST_ERROR( "Ouch..." );          // #3 continues on error
- *  if( add( 2,2 ) != 4 )
- *      BOOST_FAIL( "Ouch..." );           // #4 throws on error
- */
+
 struct MyFixture {
     MyFixture()
         : tdp(new ToDoPro)
@@ -30,21 +24,12 @@ struct MyFixture {
     ~MyFixture()
     {
         BOOST_TEST_MESSAGE("teardown fixture");
+        delete tdp;
     }
     ToDoPro* tdp;
 };
 
-BOOST_AUTO_TEST_SUITE(example_must);
-
-BOOST_AUTO_TEST_CASE(Task_object)
-{
-    Task t;
-    BOOST_CHECK_EQUAL(t.payload->id, -1);
-    BOOST_CHECK_EQUAL(t.payload->pri, -1);
-    BOOST_CHECK_EQUAL(t.payload->type, Task::TT_OTHER);
-    BOOST_CHECK_EQUAL(t.payload->desc, "");
-    BOOST_CHECK_EQUAL(t.payload->recurent_task.size(), 0);
-}
+BOOST_AUTO_TEST_SUITE(example_must)
 
 BOOST_AUTO_TEST_CASE(File_saving)
 {
@@ -64,11 +49,9 @@ BOOST_AUTO_TEST_CASE(File_saving)
 
 BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(failure_test, 2)
 
-BOOST_AUTO_TEST_CASE(failure_test)
-{
-    BOOST_CHECK_EQUAL(sizeof(int), sizeof(char));
-    BOOST_CHECK_EQUAL(sizeof(int), sizeof(long long));
-}
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(Cli_view_test)
 
 BOOST_FIXTURE_TEST_CASE(test_with_fixture, MyFixture)
 {
@@ -78,15 +61,13 @@ BOOST_FIXTURE_TEST_CASE(test_with_fixture, MyFixture)
     BOOST_CHECK_EQUAL(tdp->exec(2, av), 0);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
 
-
-BOOST_AUTO_TEST_SUITE(Task_Class_Test)
-BOOST_FIXTURE_TEST_CASE(Task_Test, TaskFixture)
+BOOST_FIXTURE_TEST_CASE(single_task_view, MyFixture)
 {
-    BOOST_CHECK_EQUAL(sptask->payload->id, 666);
-    sptask->payload->id = 2;
-    BOOST_CHECK_EQUAL(sptask->payload->id, 2);
+    std::shared_ptr<Task> t = tdp->taskmanager->create("test task");
+    tdp->view->showTask(t);
+    tdp->view->showTask(t.get());
 }
+
 BOOST_AUTO_TEST_SUITE_END()
 

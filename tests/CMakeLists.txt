@@ -4,7 +4,7 @@ project (empty_project)
 
 # General setup
 
-add_definitions(-std=c++11)
+add_definitions(-std=c++11 -g -Wall --pedantic)
 
 set(BUILD_SHARED_LIBS true)
 

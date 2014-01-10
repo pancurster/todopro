@@ -6,7 +6,7 @@
 #include "../src/task.h"
 #include <type_traits>
 
-BOOST_AUTO_TEST_SUITE(Task_module_test);
+BOOST_AUTO_TEST_SUITE(Task_module_test)
 
 BOOST_AUTO_TEST_CASE(Task_initialization)
 {

@@ -27,7 +27,7 @@ struct TaskManagerFixture {
     TaskManager* tm;
 };
 
-BOOST_AUTO_TEST_SUITE(TaskManager_test);
+BOOST_AUTO_TEST_SUITE(TaskManager_test)
 
 BOOST_FIXTURE_TEST_CASE(get_highest_task_id, TaskManagerFixture)
 {
@@ -93,6 +93,30 @@ BOOST_FIXTURE_TEST_CASE(task_find_by_desc_partial, TaskManagerFixture)
     tt = tm->findByDescPartial("zl").get();
     BOOST_CHECK_NE(t, tt);
     tt=0;
+}
+
+BOOST_FIXTURE_TEST_CASE(TaskManager_select, TaskManagerFixture)
+{
+    Task* const t = addOneTask("test select").get();
+    t->payload->id = 666;
+
+    // select po ID
+    Task* tt = tm->select("666").get();
+    BOOST_CHECK_EQUAL(t, tt);
+    tt = tm->select("444").get();
+    BOOST_CHECK_NE(t, tt);
+
+    // by desc (cale)
+    tt = tm->select("test select").get();
+    BOOST_CHECK_EQUAL(t, tt);
+    tt = tm->select("nono").get();
+    BOOST_CHECK_NE(t, tt);
+
+    // by desc part
+    tt = tm->select("sel").get();
+    BOOST_CHECK_EQUAL(t, tt);
+    tt = tm->select("china").get();
+    BOOST_CHECK_NE(t, tt);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

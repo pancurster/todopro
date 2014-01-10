@@ -31,7 +31,7 @@ struct FakeFileFormat : public FileFormatInterface {
     std::string d;
 };
 
-BOOST_AUTO_TEST_SUITE(Datastore_Test);
+BOOST_AUTO_TEST_SUITE(Datastore_Test)
 
 const std::string dupajasia = "Dupa Jasia";
 const std::string filename = "test_dupajasia.db";
