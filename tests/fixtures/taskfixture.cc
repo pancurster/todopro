@@ -10,9 +10,9 @@ TaskFixture::TaskFixture()
 
     sptask->payload->id  = 666;
     sptask->payload->pri = 777;
-    sptask->payload->type = TT_TASK;
+    sptask->payload->type = Task::TT_TASK;
     sptask->payload->desc = "Very important task";
-    sptask->payload->state = TS_PENDING;
+    sptask->payload->state = Task::STATE_PENDING;
 }
 
 TaskFixture::~TaskFixture()

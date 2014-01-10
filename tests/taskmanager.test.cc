@@ -15,6 +15,7 @@ struct TaskManagerFixture {
     ~TaskManagerFixture()
     {
         BOOST_TEST_MESSAGE("teardown taskmanager fixture");
+        delete tm;
     }
     std::shared_ptr<Task> addOneTask(std::string desc)
     {
@@ -44,9 +45,54 @@ BOOST_FIXTURE_TEST_CASE(get_highest_task_id, TaskManagerFixture)
 BOOST_FIXTURE_TEST_CASE(task_done, TaskManagerFixture)
 {
     std::shared_ptr<Task> t = addOneTask("test done");
-    BOOST_CHECK_EQUAL(t->payload->state, TS_NOSTATE);
+    BOOST_CHECK_EQUAL(t->payload->state, Task::STATE_NOT_SET);
     tm->done(t);
-    BOOST_CHECK_EQUAL(t->payload->state, TS_DONE);
+    BOOST_CHECK_EQUAL(t->payload->state, Task::STATE_DONE);
+}
+
+BOOST_FIXTURE_TEST_CASE(task_erase, TaskManagerFixture)
+{
+    std::shared_ptr<Task> t = addOneTask("test erase");
+    BOOST_CHECK_EQUAL(tm->taskmain.size(), 1);
+    tm->del(t);
+    BOOST_CHECK_EQUAL(tm->taskmain.size(), 0);
+}
+
+BOOST_FIXTURE_TEST_CASE(task_find_by_id, TaskManagerFixture)
+{
+    Task* t = addOneTask("test findById").get();
+    t->payload->id = 666;
+    Task* tt = tm->findById(t->payload->id).get();
+    BOOST_CHECK_EQUAL(t, tt);
+    tt = tm->findById(555).get();
+    //BOOST_CHECK_EQUAL(tt.get(), static_cast<Task*>(0));
+
+    // parametr str
+    tt = tm->findById("666").get();
+    BOOST_CHECK_EQUAL(t, tt);
+    tt = tm->findById("555").get();
+    BOOST_CHECK_NE(t, tt);
+}
+
+BOOST_FIXTURE_TEST_CASE(task_find_by_desc, TaskManagerFixture)
+{
+    Task* t = addOneTask("opis").get();
+    Task* tt = tm->findByDesc("opis").get();
+    BOOST_CHECK_EQUAL(t, tt);
+    tt=0;
+    tt = tm->findByDesc("zlooo").get();
+    BOOST_CHECK_NE(t, tt);
+    tt=0;
+}
+BOOST_FIXTURE_TEST_CASE(task_find_by_desc_partial, TaskManagerFixture)
+{
+    Task* t = addOneTask("opis").get();
+    Task* tt = tm->findByDescPartial("op").get();
+    BOOST_CHECK_EQUAL(t, tt);
+    tt=0;
+    tt = tm->findByDescPartial("zl").get();
+    BOOST_CHECK_NE(t, tt);
+    tt=0;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

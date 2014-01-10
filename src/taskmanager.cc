@@ -14,6 +14,10 @@ TaskManager::TaskManager()
 {
 }
 
+TaskManager::~TaskManager()
+{
+}
+
 // TODO Is passing reference to shared_ptr is ok?
 bool TaskManager::add(std::shared_ptr<Task>& t)
 {
@@ -54,7 +58,7 @@ bool TaskManager::del(std::shared_ptr<Task>& t)
 
 bool TaskManager::done(std::shared_ptr<Task>& t)
 {
-    t->payload->state = TS_DONE;
+    t->payload->state = Task::STATE_DONE;
     return true;
 }
 
@@ -83,6 +87,10 @@ std::shared_ptr<Task> TaskManager::findByDesc(std::string desc)
 
 std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
 {
+    if (taskbydesc.size() == 0) {
+        taskbydesc.fillFromVec(taskmain);
+    }
+
     //TODO chyba trzeba zastosowac wlasna funkcje compare zeby to bylo szybkie
     std::string key;
     for (TaskMap::iterator it=taskbydesc.begin(); it != taskbydesc.end(); ++it) {

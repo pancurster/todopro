@@ -6,11 +6,11 @@
 Task::Task()
     : payload(new TaskPayload)
 {
-    payload->id     = -1;
-    payload->pri    = -1;
+    payload->id     = NOT_PROPER_ID;
+    payload->pri    = NOT_PROPER_PRI;
     payload->type   = TT_OTHER;
     payload->desc   = "";
-    payload->state  = TS_NOSTATE;
+    payload->state  = STATE_NOT_SET;
 }
 
 Task::~Task()

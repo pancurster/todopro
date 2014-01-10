@@ -9,31 +9,26 @@
 #include <ctime>
 
 
-class SerDes;
 class Task;
-
-enum {
-    TASK_DESC_FIELDS=5,
-    TASK_MAX_DESC_CHARACTERS=120
-};
-
-enum TaskType {
-    TT_TASK,
-    TT_NOTE,
-    TT_OTHER
-};
-
-enum TaskState {
-    TS_NOSTATE=0,
-    TS_PENDING=1,
-    TS_SUSPEND=2,
-    TS_DONE=3
-};
 
 class Task {
 public:
     Task();
     ~Task();
+
+    enum TaskType { TT_TASK, TT_NOTE, TT_OTHER };
+    enum {
+        TASK_DESC_FIELDS    = 5,
+        MAX_DESC_CHARACTERS = 120,
+        NOT_PROPER_ID       = -1,
+        NOT_PROPER_PRI      = -1
+    };
+    enum TaskState {
+        STATE_NOT_SET = 0,
+        STATE_PENDING = 1,
+        STATE_SUSPEND = 2,
+        STATE_DONE    = 3
+    };
 
     struct TaskPayload {
         int                 id;

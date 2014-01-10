@@ -75,5 +75,25 @@ BOOST_FIXTURE_TEST_CASE(corrupted_file_deserialize, TaskFixture)
     BOOST_CHECK_EQUAL(i, 0);
 }
 
+BOOST_AUTO_TEST_CASE(interface)
+{
+    class FFF : public FileFormatInterface {
+        public:
+        FFF()
+        {
+        }
+        ~FFF()
+        {
+        }
+        std::string serialize(const TaskVec&) { return "sss";}
+        int deserialize(std::string&, TaskVec&) { return 1;}
+    };
+
+    FileFormatInterface* f(new FFF);
+    TaskVec d;
+    std::string s = "lkk";
+    BOOST_CHECK_EQUAL(f->deserialize(s, d), 1);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 

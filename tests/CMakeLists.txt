@@ -4,7 +4,7 @@ project (empty_project)
 
 # General setup
 
-add_definitions(-std=c++11 -g)
+add_definitions(-std=c++11)
 
 set(BUILD_SHARED_LIBS true)
 

@@ -16,7 +16,7 @@ public:
     void showTask(std::shared_ptr<Task>& t) const;
     void showTask(Task* t) const;
 
-private:
+protected:
     void show_task_common(Task* t) const;
     void print_header() const ;
 

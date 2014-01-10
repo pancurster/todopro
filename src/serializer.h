@@ -12,7 +12,8 @@ class Task;
  */
 class FileFormatInterface {
 public:
-    virtual ~FileFormatInterface() {};
+    FileFormatInterface();
+    virtual ~FileFormatInterface();
     
     // Przekazujemy kontener taskow bo byc moze format pliku
     // potrzebowal bedzie calego zestawu taskow przy serializacji,
@@ -30,7 +31,7 @@ public:
 class SimpleFileFormat : public FileFormatInterface {
 public:
     SimpleFileFormat ();
-    ~SimpleFileFormat();
+    virtual ~SimpleFileFormat();
     std::string serialize(const TaskVec&);
     int deserialize(std::string&, TaskVec&);
 private:

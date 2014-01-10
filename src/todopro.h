@@ -20,7 +20,6 @@ public:
     int exec(int ac, char* av[]);
 
     TaskManager*    taskmanager;
-    //TaskView*    view;
     CliView*        view;
 
     static const char* VERSION;

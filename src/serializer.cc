@@ -8,6 +8,10 @@
 #include <algorithm>
 #include <memory>
 
+FileFormatInterface::FileFormatInterface() { }
+
+FileFormatInterface::~FileFormatInterface() { }
+
 SimpleFileFormat::SimpleFileFormat() { }
 
 SimpleFileFormat::~SimpleFileFormat() { }
@@ -60,7 +64,7 @@ std::shared_ptr<Task> SimpleFileFormat::deserialize_single_task(std::string& lin
 {
     size_t s=0;
     size_t e=0;
-    char buf[TASK_MAX_DESC_CHARACTERS];
+    char buf[Task::MAX_DESC_CHARACTERS];
     std::shared_ptr<Task> t(new Task);
 
     // TODO zastapic to regexpresionami?

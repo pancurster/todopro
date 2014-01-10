@@ -12,6 +12,7 @@
 #include "simplefileformat.test.cc"
 #include "taskmanager.test.cc"
 #include "datastore.test.cc"
+#include "task.test.cc"
 /*
  * BOOST_CHECK( add( 2,2 ) == 4 );        // #1 continues on error
  * BOOST_REQUIRE( add( 2,2 ) == 4 );      // #2 throws on error
@@ -40,7 +41,7 @@ BOOST_AUTO_TEST_CASE(Task_object)
     Task t;
     BOOST_CHECK_EQUAL(t.payload->id, -1);
     BOOST_CHECK_EQUAL(t.payload->pri, -1);
-    BOOST_CHECK_EQUAL(t.payload->type, TT_OTHER);
+    BOOST_CHECK_EQUAL(t.payload->type, Task::TT_OTHER);
     BOOST_CHECK_EQUAL(t.payload->desc, "");
     BOOST_CHECK_EQUAL(t.payload->recurent_task.size(), 0);
 }
