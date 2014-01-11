@@ -25,11 +25,11 @@ int main(int argc, const char* argv[])
  */
 int ToDoPro::exec(int ac, const char* av[])
 {
-    load();
+    (void)load();
 
     commands(ac, av);
 
-    save();
+    (void)save();
 
     return 0;
 }

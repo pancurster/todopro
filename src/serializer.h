@@ -21,7 +21,7 @@ public:
     // @ret: serialized tasks
     virtual std::string serialize(const TaskVec&) = 0;
 
-    // @ret: task parsed
+    // @ret: num of parsed tasks
     virtual int deserialize(std::string&, TaskVec&) = 0;
 };
 
