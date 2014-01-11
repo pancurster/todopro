@@ -26,6 +26,7 @@ struct FakeFileFormat : public FileFormatInterface {
         // fakowa metoda ktora przypisze mi do zmiennej 'd' to co odczytaly
         // mechanizmy DataStore.
         d = image;
+        return 0;
     }
     std::string s;
     std::string d;

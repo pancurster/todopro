@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_SUITE(Cli_view_test)
 BOOST_FIXTURE_TEST_CASE(test_with_fixture, MyFixture)
 {
     BOOST_CHECK(tdp);
-    char* av[] = {"tdp", "dupa jasio"};
+    const char* av[] = {"tdp", "dupa jasio"};
     POParser vm(2, av);
     BOOST_CHECK_EQUAL(tdp->exec(2, av), 0);
 }
