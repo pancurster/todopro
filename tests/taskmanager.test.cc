@@ -42,6 +42,15 @@ BOOST_FIXTURE_TEST_CASE(get_highest_task_id, TaskManagerFixture)
     BOOST_CHECK_EQUAL(task2->payload->id, 2);
 }
 
+BOOST_FIXTURE_TEST_CASE(task_add, TaskManagerFixture)
+{
+    std::shared_ptr<Task> task = tm->createEmptyTask();
+    BOOST_CHECK_EQUAL(tm->add(task), true);
+    
+    task.reset();
+    BOOST_CHECK_EQUAL(tm->add(task), false);
+}
+
 BOOST_FIXTURE_TEST_CASE(task_done, TaskManagerFixture)
 {
     std::shared_ptr<Task> t = addOneTask("test done");
