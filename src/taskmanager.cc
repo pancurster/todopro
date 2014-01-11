@@ -91,10 +91,8 @@ std::shared_ptr<Task> TaskManager::select(std::string key)
         if (temptask = findByDescPartial(key))
             break;
     } while (0);
-    // TODO wystarczy return temptask;
-    if (temptask )
-        return temptask;
-    return 0;
+
+    return temptask;
 }
 
 std::shared_ptr<Task> TaskManager::create(std::string desc)
