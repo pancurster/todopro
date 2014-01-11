@@ -22,13 +22,15 @@ TaskManager::~TaskManager()
 // Yep: http://stackoverflow.com/a/8844924
 bool TaskManager::add(const std::shared_ptr<Task>& t)
 {
-    // Generating id is simple. We increment bigest id number
-    // of already stored tasks.
+    if (!t)
+        return false;
+
+    // We increment bigest id number of already stored tasks.
     t->payload->id = get_highest_task_id() + 1;
 
     taskmain.push_back(t);
 
-    return true; //TODO
+    return true;
 }
 
 int TaskManager::get_highest_task_id()
@@ -133,6 +135,7 @@ std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
         if (key.find(descpart) != std::string::npos)
             return it->second;
     }
+
     return 0;
 }
 
@@ -150,6 +153,8 @@ std::shared_ptr<Task> TaskManager::findById(int id)
     if (taskbyid.size() == 0) {
         taskbyid.fillFromVec(taskmain);
     }
-    return taskbyid[id];
+    if (taskbyid.count(id))
+        return taskbyid[id];
+    return 0;
 }
 
