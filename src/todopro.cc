@@ -13,7 +13,7 @@
 
 const char* ToDoPro::VERSION="0.0.2";
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
     std::unique_ptr<ToDoPro> tdp(new ToDoPro);
     return tdp->exec(argc, argv);
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
  * Mamy tutaj prosty przeplyw:
  * 1) zaladowanie, 2) modyfikacja, 3) zapis.
  */
-int ToDoPro::exec(int ac, char* av[])
+int ToDoPro::exec(int ac, const char* av[])
 {
     load();
 
@@ -56,7 +56,7 @@ void ToDoPro::load()
 // TODO move this to poparser module. Divide to functions like
 // 'no_action_functions', 'select_functions', 'modify_functions'
 // or something like that (?).
-void ToDoPro::commands(int ac, char* av[])
+void ToDoPro::commands(int ac, const char* av[])
 {
     POParser vm(ac, av);
     std::shared_ptr<Task> temptask;

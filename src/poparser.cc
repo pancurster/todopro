@@ -2,7 +2,7 @@
 
 #include <boost/program_options.hpp>
 
-POParser::POParser(int ac, char* av[])
+POParser::POParser(int ac, const char* av[])
     : all("Usage: tdp [options]\nOptions")
     , general_desc("General operations") // TODO must be here?
     , detailed_desc("Task modify options (require \"select\" option use)")
@@ -17,7 +17,7 @@ POParser::~POParser()
 /*
  * All HARD WORK is here.
  */
-void POParser::parse_program_options(int ac, char* av[])
+void POParser::parse_program_options(int ac, const char* av[])
 {
     namespace po = boost::program_options;
 

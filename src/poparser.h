@@ -13,7 +13,7 @@ typedef po::variables_map POVars;
  */
 class POParser : public POVars {
 public:
-    POParser(int ac, char* av[]);
+    POParser(int ac, const char* av[]);
     ~POParser();
 
     po::options_description all;
@@ -21,7 +21,7 @@ public:
     po::options_description detailed_desc;
 
 private:
-    void parse_program_options(int ac, char* av[]);
+    void parse_program_options(int ac, const char* av[]);
 };
 
 #endif //POPARSER_H

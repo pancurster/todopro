@@ -15,9 +15,9 @@ public:
     // Main flow methods
     void load();
     void save();
-    void commands(int ac, char* av[]);
+    void commands(int ac, const char* av[]);
 
-    int exec(int ac, char* av[]);
+    int exec(int ac, const char* av[]);
 
     TaskManager*    taskmanager;
     CliView*        view;
