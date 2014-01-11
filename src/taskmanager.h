@@ -7,8 +7,7 @@
 #include "poparser.h"
 #include "task.h"
 
-typedef std::vector<std::shared_ptr<Task>>              TaskVec;
-typedef std::map<std::string, std::shared_ptr<Task>>    TaskMap;
+typedef std::vector<std::shared_ptr<Task>> TaskVec;
 
 template <class KEY>
 class TaskMapFabric : public std::map<KEY, std::shared_ptr<Task>> {
