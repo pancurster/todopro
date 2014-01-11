@@ -18,8 +18,9 @@ TaskManager::~TaskManager()
 {
 }
 
-// TODO Is passing reference to shared_ptr is ok?
-bool TaskManager::add(std::shared_ptr<Task>& t)
+// Passing reference to shared_ptr is ok?
+// Yep: http://stackoverflow.com/a/8844924
+bool TaskManager::add(const std::shared_ptr<Task>& t)
 {
     // Generating id is simple. We increment bigest id number
     // of already stored tasks.
@@ -46,7 +47,7 @@ int TaskManager::get_highest_task_id()
     return fun.maxValue;
 }
 
-bool TaskManager::del(std::shared_ptr<Task>& t)
+bool TaskManager::del(const std::shared_ptr<Task>& t)
 {
     // The cost is higher than erasing from map but other way
     // we must consider synchronizing to 'maintask' container, so: cost,
@@ -56,7 +57,7 @@ bool TaskManager::del(std::shared_ptr<Task>& t)
     return true;
 }
 
-bool TaskManager::done(std::shared_ptr<Task>& t)
+bool TaskManager::done(const std::shared_ptr<Task>& t)
 {
     t->payload->state = Task::STATE_DONE;
     return true;

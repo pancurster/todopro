@@ -71,9 +71,9 @@ class TaskManager {
 public:
     TaskManager();
     ~TaskManager();
-    bool add(std::shared_ptr<Task>& t);
-    bool del(std::shared_ptr<Task>& t);
-    bool done(std::shared_ptr<Task>& t);
+    bool add(const std::shared_ptr<Task>& t);
+    bool del(const std::shared_ptr<Task>& t);
+    bool done(const std::shared_ptr<Task>& t);
     std::shared_ptr<Task> findByDesc(std::string desc);
     std::shared_ptr<Task> findByDescPartial(std::string desc);
     std::shared_ptr<Task> findById(std::string id);
