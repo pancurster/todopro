@@ -82,7 +82,7 @@ std::shared_ptr<Task> TaskManager::select(std::string key)
     // 1) Try select by ID
     // 2) Try select by desc (parameter is whole key)
     // 3) Try select by desc (parameter is substr of key)
-    std::shared_ptr<Task> temptask(0);
+    std::shared_ptr<Task> temptask;
     do {
         if (temptask = findById(key))
             break;
@@ -112,7 +112,10 @@ std::shared_ptr<Task> TaskManager::findByDesc(std::string desc)
     if (taskbydesc.size() == 0) {
         taskbydesc.fillFromVec(taskmain);
     }
-    return taskbydesc[desc];
+
+    if (taskbydesc.count(desc))
+        return taskbydesc[desc];
+    return 0;
 }
 
 std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
