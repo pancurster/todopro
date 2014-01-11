@@ -4,7 +4,6 @@
 #include "task.h"
 #include "taskmanager.h"
 #include <string>
-//class TaskMap; //TODO
 
 class TaskView {
 public:
