@@ -2,6 +2,7 @@
 #define TASKLIST_H
 
 #include <map>
+#include <unordered_map>
 #include <memory>
 
 #include "poparser.h"
@@ -40,10 +41,10 @@ private:
     }
 };
 
-class TaskMapByDesc : public std::map<std::string, std::shared_ptr<Task>> {
+class TaskMapByDesc : public std::unordered_map<std::string, std::shared_ptr<Task>> {
 public:
     TaskMapByDesc()
-        : std::map<std::string, std::shared_ptr<Task>>()
+        : std::unordered_map<std::string, std::shared_ptr<Task>>()
     {}
     void fillFromVec(TaskVec& tv)
     {

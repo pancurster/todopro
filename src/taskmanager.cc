@@ -125,7 +125,6 @@ std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
         taskbydesc.fillFromVec(taskmain);
     }
 
-    //TODO chyba trzeba zastosowac wlasna funkcje compare zeby to bylo szybkie
     std::string key;
     for (TaskMapByDesc::iterator it=taskbydesc.begin();
             it != taskbydesc.end(); ++it)
