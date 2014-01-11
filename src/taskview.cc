@@ -40,7 +40,7 @@ void CliView::showTask(TaskVec& tvec) const
         if (color) std::cout << Style::K_BLACK_ON_WHITE;
         else       std::cout << Style::K_WHITE_ON_BLACK;
 
-        show_task_common(it->get());
+        std::cout << show_task_common(it->get());
 
         std::cout << Style::K_NO_STYLE << "\n";
     }
@@ -60,36 +60,36 @@ void CliView::print_header() const
 
 void CliView::showTask(std::shared_ptr<Task>& t) const
 {
-    show_task_common(t.get());
-    std::cout << "\n";
+    std::cout << show_task_common(t.get()) << "\n";
 }
 
 void CliView::showTask(Task* t) const
 {
-    show_task_common(t);
-    std::cout << "\n";
+    std::cout << show_task_common(t) << "\n";
 }
 
-// TODO Rozwazyc czy nie lepej bylo by zeby ta funkcja zwracala stringa
-void CliView::show_task_common(Task* t) const
+std::string CliView::show_task_common(Task* t) const
 {
-    ssize_t len=0;
+    using std::string;
+
     std::string str = "";
 
-    str = std::to_string(t->payload->id);
-    len += str.size();
-    std::cout<< std::setw(FIELD_WIDTH_ID)<< std::left << str;
+    string token = std::to_string(t->payload->id);
+    str.append(token);
+    str.append(FIELD_WIDTH_ID - token.size(), ' ');
 
-    str = std::to_string(t->payload->pri);
-    len += str.size();
-    std::cout<< std::setw(FIELD_WIDTH_PRI)<< str;
+    token = std::to_string(t->payload->pri);
+    str.append(token);
+    str.append(FIELD_WIDTH_PRI - token.size(), ' ');
 
-    str = Labels::STATE_VAL[t->payload->state];
-    len += str.size();
-    std::cout<< std::setw(FIELD_WIDTH_STATE)<< str;
+    token = Labels::STATE_VAL[t->payload->state];
+    str.append(token);
+    str.append(FIELD_WIDTH_STATE - token.size(), ' ');
 
-    str = t->payload->desc;
-    len += str.size();
-    std::cout << std::setfill(' ') << std::setw(FIELD_WIDTH_DESC) << str;
+    token = t->payload->desc;
+    str.append(token);
+    str.append(FIELD_WIDTH_DESC - token.size(), ' ');
+
+    return str;
 }
 

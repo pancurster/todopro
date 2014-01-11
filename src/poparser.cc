@@ -4,7 +4,7 @@
 
 POParser::POParser(int ac, const char* av[])
     : all("Usage: tdp [options]\nOptions")
-    , general_desc("General operations") // TODO must be here?
+    , general_desc("General operations")
     , detailed_desc("Task modify options (require \"select\" option use)")
 {
     parse_program_options(ac, av);

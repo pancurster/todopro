@@ -10,6 +10,7 @@
 
 typedef std::vector<std::shared_ptr<Task>> TaskVec;
 
+#if 0
 template <class KEY>
 class TaskMapFabric : public std::map<KEY, std::shared_ptr<Task>> {
 public:
@@ -37,9 +38,9 @@ private:
             return (*it)->payload->state;
 
         return 0;
-        // TODO add here static assertion
     }
 };
+#endif
 
 class TaskMapByDesc : public std::unordered_map<std::string, std::shared_ptr<Task>> {
 public:

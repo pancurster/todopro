@@ -67,7 +67,6 @@ std::shared_ptr<Task> SimpleFileFormat::deserialize_single_task(std::string& lin
     char buf[Task::MAX_DESC_CHARACTERS];
     std::shared_ptr<Task> t(new Task);
 
-    // TODO zastapic to regexpresionami?
     bool parsing_success = false;
     do {
         // ID

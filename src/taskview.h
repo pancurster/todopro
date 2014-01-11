@@ -3,6 +3,7 @@
 
 #include "task.h"
 #include "taskmanager.h"
+#include <string>
 //class TaskMap; //TODO
 
 class TaskView {
@@ -18,7 +19,7 @@ public:
     void showTask(Task* t) const;
 
 protected:
-    void show_task_common(Task* t) const;
+    std::string show_task_common(Task* t) const;
     void print_header() const ;
 
     enum {
