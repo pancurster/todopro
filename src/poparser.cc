@@ -6,12 +6,18 @@ POParser::POParser(int ac, const char* av[])
     : all("Usage: tdp [options]\nOptions")
     , general_desc("General operations")
     , detailed_desc("Task modify options (require \"select\" option use)")
+    , m_fail(false)
 {
     parse_program_options(ac, av);
 }
 
 POParser::~POParser()
 {
+}
+
+bool POParser::fail()
+{
+    return m_fail;
 }
 
 /*
@@ -39,7 +45,7 @@ void POParser::parse_program_options(int ac, const char* av[])
         ("remove,r",    "remove task")
         ("pri,p",       po::value<int>(), "set priority")
         ("deadline",    "set deadline")
-        ("desc",        "set description [default no parameter flag]")
+        ("desc",        po::value<std::string>(), "set description [default no parameter flag]")
         ;
     all.add_options()
         ("help,h",      "help msg")
@@ -48,12 +54,19 @@ void POParser::parse_program_options(int ac, const char* av[])
 
     all.add(general_desc).add(detailed_desc);
     // TODO passing *this to base type method is ok?
-    po::store(po::command_line_parser(ac, av).
+    try {
+        po::store(po::command_line_parser(ac, av).
                 options(all).
                 positional(p).
                 style(po::command_line_style::unix_style).
                 run(), *this);
 
-    po::notify(*this);
+        po::notify(*this);
+
+    } catch (std::exception& e) {
+        m_fail = true;
+        std::cout << "Bad program line arguments: ";
+        std::cout << e.what() << "\n";
+    }
 }
 

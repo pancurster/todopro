@@ -20,8 +20,11 @@ public:
     po::options_description general_desc;
     po::options_description detailed_desc;
 
+    bool fail();
+
 private:
     void parse_program_options(int ac, const char* av[]);
+    bool m_fail;
 };
 
 #endif //POPARSER_H

@@ -1,2 +1,4 @@
 -Add doxygen documentation for project
 -Komunikaty o bledach kierowac na cerr
+-Kiedy trzeba biedzie dodac synchronizacje pomiedzy kontenerami, albo rozwazyc
+jakis multikey(?).

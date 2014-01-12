@@ -17,18 +17,22 @@ UserInput::~UserInput()
 {
 }
 
-void UserInput::commands(int ac, const char* av[]) const
+bool UserInput::commands(int ac, const char* av[]) const
 {
     POParser vm(ac, av);
+    if (vm.fail()) {
+        return false;
+    }
+
     std::shared_ptr<Task> temptask;
 
     if (vm.count("help")) {
         std::cout << vm.all << std::endl;
-        return;
+        return true;
     }
     if (vm.count("version")) {
         std::cout << ToDoPro::VERSION << std::endl;
-        return;
+        return true;
     }
 
     // CREATE/SELECT
@@ -40,6 +44,11 @@ void UserInput::commands(int ac, const char* av[]) const
         std::string arg = vm["new"].as<std::string>();
         temptask = taskmanager.create(arg);
         taskmanager.add(temptask);
+
+    } else {
+        // OK. No select, no create, we can only show and THE END.
+        taskview.showTask(taskmanager.taskmain);
+        return true;
     }
 
     // MODIFY
@@ -67,4 +76,6 @@ void UserInput::commands(int ac, const char* av[]) const
     } else {
         taskview.showTask(taskmanager.taskmain);
     }
+
+    return true;
 }

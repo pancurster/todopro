@@ -24,7 +24,7 @@ int ToDoPro::exec(int ac, const char* av[])
     (void)load();
 
     UserInput ui(*taskmanager, *view);
-    ui.commands(ac, av);
+    (void)ui.commands(ac, av);
 
     (void)save();
 

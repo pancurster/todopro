@@ -110,7 +110,7 @@ std::shared_ptr<Task> TaskManager::create(std::string desc)
 
 std::shared_ptr<Task> TaskManager::findByDesc(std::string desc)
 {
-    if (taskbydesc.size() == 0) {
+    if (taskbydesc.size() != taskmain.size()) {
         taskbydesc.fillFromVec(taskmain);
     }
 
@@ -121,7 +121,7 @@ std::shared_ptr<Task> TaskManager::findByDesc(std::string desc)
 
 std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
 {
-    if (taskbydesc.size() == 0) {
+    if (taskbydesc.size() != taskmain.size()) {
         taskbydesc.fillFromVec(taskmain);
     }
 
@@ -149,7 +149,7 @@ std::shared_ptr<Task> TaskManager::findById(std::string id)
 
 std::shared_ptr<Task> TaskManager::findById(int id)
 {
-    if (taskbyid.size() == 0) {
+    if (taskbyid.size() != taskmain.size()) {
         taskbyid.fillFromVec(taskmain);
     }
     if (taskbyid.count(id))

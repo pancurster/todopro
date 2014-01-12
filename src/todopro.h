@@ -2,7 +2,7 @@
 #define TODOPRO_H
 
 class TaskManager;
-class CliView;
+class TaskView;
 
 class ToDoPro {
 public:
@@ -16,7 +16,7 @@ public:
     int exec(int ac, const char* av[]);
 
     TaskManager*    taskmanager;
-    CliView*        view;
+    TaskView*       view;
 
     static const char* VERSION;
 private:

@@ -9,7 +9,7 @@ public:
     UserInput(TaskManager& tm, const TaskView& tv);
     ~UserInput();
 
-    void commands(int ac, const char* av[]) const;
+    bool commands(int ac, const char* av[]) const;
 private:
     TaskManager& taskmanager;
     const TaskView& taskview;
