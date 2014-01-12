@@ -14,6 +14,7 @@
 #include "taskmanager.test.cc"
 #include "datastore.test.cc"
 #include "task.test.cc"
+#include "userinput.test.cc"
 
 struct MyFixture {
     MyFixture()
