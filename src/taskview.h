@@ -9,6 +9,8 @@ class TaskView {
 public:
     virtual ~TaskView() {}
     virtual void showTask(TaskVec&) const = 0;
+    virtual void showTask(std::shared_ptr<Task>& t) const = 0;
+    virtual void showTask(Task* t) const = 0;
 };
 
 class CliView : public TaskView {

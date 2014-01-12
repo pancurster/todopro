@@ -1,10 +1,7 @@
 #ifndef TODOPRO_H
 #define TODOPRO_H
 
-#include "poparser.h"   // POVars
-
 class TaskManager;
-class TaskView;
 class CliView;
 
 class ToDoPro {
@@ -15,7 +12,6 @@ public:
     // Main flow methods
     void load();
     void save();
-    void commands(int ac, const char* av[]);
 
     int exec(int ac, const char* av[]);
 
