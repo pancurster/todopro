@@ -49,54 +49,35 @@ int SimpleFileFormat::deserialize(std::string& image, TaskVec& tvec)
 
 std::shared_ptr<Task> SimpleFileFormat::deserialize_single_task(std::string& line)
 {
-    size_t s=0;
-    size_t e=0;
-    char buf[Task::MAX_DESC_CHARACTERS];
     std::shared_ptr<Task> t(new Task);
+    bool parsing_success = true;
 
-    std::stringstream ss;
-    bool parsing_success = false;
-    do {
-        // ID
-        if ((e = line.find(":", s)) == std::string::npos)
-            break;
-        ss.str(line.substr(s, e));
-        ss >> t->payload->id;
-        s = e + 1;
+    int type, state;
+    char c[5]= {0};
+    std::stringstream ss(line);
 
-        // PRI
-        if ((e = line.find(":", s)) == std::string::npos)
-            break;
-        ss.str(line.substr(s, e));
-        ss >> t->payload->pri;
-        s = e + 1;
+    ss  >> t->payload->id   >> c[0]
+        >> t->payload->pri  >> c[1]
+        >> type             >> c[2]
+        >> state            >> c[3];
 
-        // TYPE
-        if ((e = line.find(":", s)) == std::string::npos)
-            break;
-        ss.str(line.substr(s, e));
-        int temp;
-        ss >> temp;
-        t->payload->type = static_cast<Task::TaskType>(temp);
-        s = e + 1;
+    t->payload->type = static_cast<Task::TaskType>(type);
+    t->payload->state = static_cast<Task::TaskState>(state);
 
-        // STATE
-        if ((e = line.find(":", s)) == std::string::npos)
-            break;
-        ss.str(line.substr(s, e));
-        ss >> temp;
-        t->payload->state = static_cast<Task::TaskState>(temp);
-        s = e + 1;
+    // and, at the end, take description of task.
+    // Can't find sexy construction to fetch from ss
+    // a string with whitespaces.
+    std::string desc = ss.str();
+    size_t e = desc.rfind(";");
+    size_t s = desc.rfind(":");
+    s += 1;
+    t->payload->desc = desc.substr(s, e-s);
 
-        // DESC
-        e = line.find(";", s);
-        e -= 1;
-        t->payload->desc = line.substr(s, e);
-        if (t->payload->desc.size() < 1)
-            break;
 
-        parsing_success = true;
-    } while (0);
+    if (std::strcmp("::::", c) != 0)
+        parsing_success = false;
+    if (t->payload->desc.size() == 0)
+        parsing_success = false;
 
     if (parsing_success) {
         return t;
