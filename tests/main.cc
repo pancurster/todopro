@@ -9,6 +9,7 @@
 #include "../src/poparser.h"
 #include "../src/datastore.h"
 #include "../src/taskview.h"
+#include "../src/sff.h"
 
 #include "simplefileformat.test.cc"
 #include "taskmanager.test.cc"

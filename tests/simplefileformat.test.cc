@@ -6,6 +6,7 @@
 #include "../src/taskmanager.h"
 #include "../src/serializer.h"
 #include "../src/task.h"
+#include "../src/sff.h"
 #include "fixtures/taskfixture.h"
 #include <string>
 

@@ -3,6 +3,7 @@
 #include "taskview.h"
 #include "userinput.h"
 #include "datastore.h"
+#include "sff.h"
 
 #include <iostream>
 #include <memory>

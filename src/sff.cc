@@ -1,3 +1,4 @@
+#include "sff.h"
 #include "serializer.h"
 #include "task.h"
 
@@ -7,10 +8,6 @@
 #include <cstring>
 #include <algorithm>
 #include <memory>
-
-FileFormatInterface::FileFormatInterface() { }
-
-FileFormatInterface::~FileFormatInterface() { }
 
 SimpleFileFormat::SimpleFileFormat() { }
 
