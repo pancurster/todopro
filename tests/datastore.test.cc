@@ -34,18 +34,19 @@ struct FakeFileFormat : public FileFormatInterface {
 
 BOOST_AUTO_TEST_SUITE(Datastore_Test)
 
+const std::string FIXT_FILEN = "test.db";
 const std::string dupajasia = "Dupa Jasia";
 const std::string filename = "test_dupajasia.db";
 TaskVec fakeVec;    // fakeowy kontener
 BOOST_AUTO_TEST_CASE(function_save)
 {
-    DataStore<FakeFileFormat> saver;
+    DataStore<FakeFileFormat> saver(FIXT_FILEN);
     // Fakeujemy to co wyplowa serializer
     FakeFileFormat* const fff = dynamic_cast<FakeFileFormat*>(saver.getFFObj());
     fff->s = dupajasia;
 
     // zapis do pliku
-    bool ret = saver.save(filename, fakeVec);
+    bool ret = saver.save(fakeVec);
     BOOST_CHECK_EQUAL(ret, true);
 
     // sprawdzanie niezaleznymi funkcjami zawartosci pliku
@@ -79,13 +80,13 @@ BOOST_AUTO_TEST_CASE(function_load)
     BOOST_REQUIRE_EQUAL(dupajasia.compare(buf), 0);
 
     // if so, test our class loader/reader
-    DataStore<FakeFileFormat> loader;
+    DataStore<FakeFileFormat> loader(FIXT_FILEN);
     FakeFileFormat* const fff = dynamic_cast<FakeFileFormat*>(loader.getFFObj());
 
     // test is our mock value is properly initialized
     BOOST_CHECK_EQUAL(fff->d.compare(""), 0);
 
-    loader.load(filename, fakeVec);
+    loader.load(fakeVec);
 
     BOOST_TEST_MESSAGE(fff->d);
     BOOST_CHECK_EQUAL(dupajasia.compare(fff->d), 0);

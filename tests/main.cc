@@ -41,10 +41,10 @@ BOOST_AUTO_TEST_CASE(File_saving)
     TaskVec tvec;
     tvec.push_back(t);
     BOOST_CHECK_EQUAL(tvec.size(), 1);
-    DataStore<SimpleFileFormat> dstore;
-    dstore.save("test.db", tvec);
+    DataStore<SimpleFileFormat> dstore("test.db");
+    dstore.save(tvec);
     TaskVec tinvec;
-    dstore.load("test.db", tinvec);
+    dstore.load(tinvec);
     BOOST_CHECK_EQUAL(tinvec.size(), 1);
 }
 

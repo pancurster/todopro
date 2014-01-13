@@ -53,7 +53,7 @@ void POParser::parse_program_options(int ac, const char* av[])
         ;
 
     all.add(general_desc).add(detailed_desc);
-    // TODO passing *this to base type method is ok?
+
     try {
         po::store(po::command_line_parser(ac, av).
                 options(all).

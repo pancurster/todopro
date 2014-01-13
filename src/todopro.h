@@ -11,6 +11,7 @@ public:
 
     // Main flow methods
     void load();
+    void modify(int ac, const char* av[]);
     void save();
 
     int exec(int ac, const char* av[]);
@@ -19,6 +20,7 @@ public:
     TaskView*       view;
 
     static const char* VERSION;
+    static const char* DEF_FILENAME;
 private:
 
 };

@@ -7,27 +7,31 @@
 #include "serializer.h"
 #include "task.h"
 
+#include <boost/scoped_ptr.hpp>
 
 template <class T>
 class DataStore {
 public:
-    DataStore();
+    DataStore(const std::string& filename);
     ~DataStore();
 
-    bool save(const std::string& filename, const TaskVec& task_container) const;
-    bool load(const std::string& filename, TaskVec& task_container) const;
+    bool save(const TaskVec& task_container) const;
+    bool load(TaskVec& task_container) const;
     FileFormatInterface* getFFObj() const;
 
 private:
-    bool save_to_file(const std::string& filename, const std::string in_buff) const;
-    bool read_from_file(const std::string& filename, std::string& image) const;
+    bool save_to_file(const std::string& in_buff) const;
+    bool read_from_file(std::string& image) const;
 
-    FileFormatInterface* file_format;
+    //FileFormatInterface* file_format;
+    boost::scoped_ptr<FileFormatInterface> file_format;
+    std::string m_filename;
 };
 
 template <class T>
-DataStore<T>::DataStore()
+DataStore<T>::DataStore(const std::string& filename)
     : file_format(new T)
+    , m_filename(filename)
 {
 }
 
@@ -35,24 +39,24 @@ DataStore<T>::DataStore()
 template <class T>
 DataStore<T>::~DataStore()
 {
-    delete file_format;
+    //delete file_format;
 }
 
 
 template <class T>
-bool DataStore<T>::save(const std::string& filename, const TaskVec& task_container) const
+bool DataStore<T>::save(const TaskVec& task_container) const
 {
     std::string serout = file_format->serialize(task_container);
-    return save_to_file(filename, serout);
+    return save_to_file(serout);
 }
 
 
 template <class T>
-bool DataStore<T>::load(const std::string& filename, TaskVec& task_container) const
+bool DataStore<T>::load(TaskVec& task_container) const
 {
     std::string image;
 
-    bool ret = read_from_file(filename, image);
+    bool ret = read_from_file(image);
     if (!ret)
         return false;
 
@@ -62,14 +66,14 @@ bool DataStore<T>::load(const std::string& filename, TaskVec& task_container) co
 template <class T>
 inline FileFormatInterface* DataStore<T>::getFFObj() const
 {
-    return file_format;
+    return file_format.get();
 }
 
 
 template <class T>
-bool DataStore<T>::save_to_file(const std::string& filename, const std::string in_buff) const
+bool DataStore<T>::save_to_file(const std::string& in_buff) const
 {
-    std::ofstream file(filename, std::ofstream::out);
+    std::ofstream file(m_filename, std::ofstream::out);
     if (file.fail())
         return false;
 
@@ -80,30 +84,20 @@ bool DataStore<T>::save_to_file(const std::string& filename, const std::string i
 
 
 template <class T>
-bool DataStore<T>::read_from_file(const std::string& filename, std::string& image) const
+bool DataStore<T>::read_from_file(std::string& image) const
 {
-    std::ifstream file(filename, std::ifstream::in);
+    std::ifstream file(m_filename, std::ifstream::in);
     if (!file.good()) {
         std::cout << "No task database file\n";
         image = "";
         return true;
     }
 
-    // Find how much characters in file
-    std::filebuf* pbuf = file.rdbuf();
-    std::size_t size = pbuf->pubseekoff(0, file.end, file.in);
-    pbuf->pubseekpos(0, file.in);
-
-    // Prepare buffer...
-    char* buf = new char[size+1];
-    memset(buf, 0, size+1);
-
-    // and read to it
-    pbuf->sgetn(buf, size);
-    image = buf;
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    image = buffer.str();
 
     file.close();
-    delete[] buf;
     return true;
 }
 
