@@ -15,20 +15,15 @@ SimpleFileFormat::~SimpleFileFormat() { }
 
 std::string SimpleFileFormat::serialize(const TaskVec& tvec)
 {
-    std::string image;
+    std::stringstream image;
     for (auto it=tvec.begin(); it != tvec.end(); ++it) {
-        image += std::to_string((*it)->payload->id);
-        image += ":";
-        image += std::to_string((*it)->payload->pri);
-        image += ":";
-        image += std::to_string((*it)->payload->type);
-        image += ":";
-        image += std::to_string((*it)->payload->state);
-        image += ":";
-        image += (*it)->payload->desc;
-        image += ";\n";
+        image << (*it)->payload->id     << ":"
+              << (*it)->payload->pri    << ":"
+              << (*it)->payload->type   << ":"
+              << (*it)->payload->state  << ":"
+              << (*it)->payload->desc   << ";\n";
     }
-    return image;
+    return image.str();
 }
 
 int SimpleFileFormat::deserialize(std::string& image, TaskVec& tvec)
