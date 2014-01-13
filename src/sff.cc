@@ -16,7 +16,7 @@ SimpleFileFormat::~SimpleFileFormat() { }
 std::string SimpleFileFormat::serialize(const TaskVec& tvec)
 {
     std::string image;
-    for (TaskVec::const_iterator it=tvec.begin(); it != tvec.end(); ++it) {
+    for (auto it=tvec.begin(); it != tvec.end(); ++it) {
         image += std::to_string((*it)->payload->id);
         image += ":";
         image += std::to_string((*it)->payload->pri);

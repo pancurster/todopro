@@ -49,7 +49,7 @@ public:
     {}
     void fillFromVec(TaskVec& tv)
     {
-        for (TaskVec::iterator it=tv.begin(); it != tv.end(); ++it) {
+        for (auto it=tv.begin(); it != tv.end(); ++it) {
             insert(make_pair((*it)->payload->desc, *it));
         }
     }
@@ -62,7 +62,7 @@ public:
     {}
     void fillFromVec(TaskVec& tv)
     {
-        for (TaskVec::iterator it=tv.begin(); it != tv.end(); ++it) {
+        for (auto it=tv.begin(); it != tv.end(); ++it) {
             insert(make_pair((*it)->payload->id, *it));
         }
     }

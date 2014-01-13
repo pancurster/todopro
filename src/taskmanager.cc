@@ -126,9 +126,7 @@ std::shared_ptr<Task> TaskManager::findByDescPartial(std::string descpart)
     }
 
     std::string key;
-    for (TaskMapByDesc::iterator it=taskbydesc.begin();
-            it != taskbydesc.end(); ++it)
-    {
+    for (auto it=taskbydesc.begin(); it != taskbydesc.end(); ++it) {
         key = it->first;
 
         if (key.find(descpart) != std::string::npos)

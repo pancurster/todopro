@@ -35,7 +35,7 @@ void CliView::showTask(TaskVec& tvec) const
     this->print_header();
 
     int color=0;
-    for(TaskVec::iterator it=tvec.begin(); it!=tvec.end(); ++it, color^=1) {
+    for(auto it=tvec.begin(); it!=tvec.end(); ++it, color^=1) {
 
         if (color) std::cout << Style::K_BLACK_ON_WHITE;
         else       std::cout << Style::K_WHITE_ON_BLACK;
