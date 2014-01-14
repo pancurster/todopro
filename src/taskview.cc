@@ -70,26 +70,14 @@ void CliView::showTask(Task* t) const
 
 std::string CliView::show_task_common(Task* t) const
 {
-    using std::string;
+    using namespace std;
 
-    std::string str = "";
+    stringstream str;
+    str << setw(FIELD_WIDTH_ID) << left << t->payload->id
+        << setw(FIELD_WIDTH_PRI) << left << t->payload->pri 
+        << setw(FIELD_WIDTH_STATE) << left << Labels::STATE_VAL[t->payload->state]
+        << setw(FIELD_WIDTH_DESC) << left << t->payload->desc ;
 
-    string token = std::to_string(t->payload->id);
-    str.append(token);
-    str.append(FIELD_WIDTH_ID - token.size(), ' ');
-
-    token = std::to_string(t->payload->pri);
-    str.append(token);
-    str.append(FIELD_WIDTH_PRI - token.size(), ' ');
-
-    token = Labels::STATE_VAL[t->payload->state];
-    str.append(token);
-    str.append(FIELD_WIDTH_STATE - token.size(), ' ');
-
-    token = t->payload->desc;
-    str.append(token);
-    str.append(FIELD_WIDTH_DESC - token.size(), ' ');
-
-    return str;
+    return str.str();
 }
 

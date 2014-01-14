@@ -1,6 +1,8 @@
 #ifndef TODOPRO_H
 #define TODOPRO_H
 
+#include <boost/scoped_ptr.hpp>
+
 class TaskManager;
 class TaskView;
 
@@ -16,8 +18,8 @@ public:
 
     int exec(int ac, const char* av[]);
 
-    TaskManager*    taskmanager;
-    TaskView*       view;
+    boost::scoped_ptr<TaskManager>  taskmanager;
+    boost::scoped_ptr<TaskView>     view;
 
     static const char* VERSION;
     static const char* DEF_FILENAME;

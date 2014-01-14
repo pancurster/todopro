@@ -22,7 +22,9 @@ TaskManager::~TaskManager()
 // Yep: http://stackoverflow.com/a/8844924
 bool TaskManager::add(const std::shared_ptr<Task>& t)
 {
-    if (!t)
+    // if(!t) will work: http://www.cplusplus.com/reference/memory/shared_ptr/operator%20bool/
+    // also if (t == nullptr)
+    if (!t.get())
         return false;
 
     // We increment bigest id number of already stored tasks.
@@ -80,25 +82,22 @@ std::shared_ptr<Task> TaskManager::createEmptyTask()
     return t;
 }
 
-std::shared_ptr<Task> TaskManager::select(std::string key)
+std::shared_ptr<Task> TaskManager::select(const std::string& key)
 {
     // 1) Try select by ID
     // 2) Try select by desc (parameter is whole key)
     // 3) Try select by desc (parameter is substr of key)
     std::shared_ptr<Task> temptask;
-    do {
-        if (temptask = findById(key))
-            break;
-        if (temptask = findByDesc(key))
-            break;
-        if (temptask = findByDescPartial(key))
-            break;
-    } while (0);
-
+    if (temptask = findById(key))
+        ;
+    else if (temptask = findByDesc(key))
+        ;
+    else (temptask = findByDescPartial(key))
+        ;
     return temptask;
 }
 
-std::shared_ptr<Task> TaskManager::create(std::string desc)
+std::shared_ptr<Task> TaskManager::create(const std::string& desc)
 {
     std::shared_ptr<Task> temptask(0);
 

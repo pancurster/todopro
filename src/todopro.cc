@@ -36,8 +36,6 @@ ToDoPro::ToDoPro()
 
 ToDoPro::~ToDoPro()
 {
-    delete view;
-    delete taskmanager;
 }
 
 void ToDoPro::modify(int ac, const char* av[])

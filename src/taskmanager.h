@@ -4,43 +4,12 @@
 #include <map>
 #include <unordered_map>
 #include <memory>
+#include <cctype>
 
 #include "poparser.h"
 #include "task.h"
 
 typedef std::vector<std::shared_ptr<Task>> TaskVec;
-
-#if 0
-template <class KEY>
-class TaskMapFabric : public std::map<KEY, std::shared_ptr<Task>> {
-public:
-    TaskMapFabric()
-        : std::map<KEY, std::shared_ptr<Task>>()
-        , fieldtype("id")
-    { }
-    void fillFromVec(TaskVec& tv)
-    {
-        for (TaskVec::iterator it=tv.begin(); it != tv.end(); ++it) {
-            this->insert(make_pair(getKeyValue(it), *it));
-        }
-    }
-private:
-    std::string fieldtype;
-    KEY getKeyValue(TaskVec::iterator& it)
-    {
-        if (fieldtype == "id")
-            return (*it)->payload->id;
-        if (fieldtype == "pri")
-            return (*it)->payload->pri;
-        //if (fieldtype == "desc")
-            //return (*it)->payload->desc;
-        if (fieldtype == "state")
-            return (*it)->payload->state;
-
-        return 0;
-    }
-};
-#endif
 
 class TaskMapByDesc : public std::unordered_map<std::string, std::shared_ptr<Task>> {
 public:
@@ -80,8 +49,8 @@ public:
     std::shared_ptr<Task> findById(std::string id);
     std::shared_ptr<Task> findById(int id);
     std::shared_ptr<Task> createEmptyTask();
-    std::shared_ptr<Task> select(std::string key);
-    std::shared_ptr<Task> create(std::string desc);
+    std::shared_ptr<Task> select(const std::string& key);
+    std::shared_ptr<Task> create(const std::string& desc);
     // The 'taskmain' is:
     // - base container for tasks. 
     // - fast so fit well to just show list of tasks, what is most often use case.
