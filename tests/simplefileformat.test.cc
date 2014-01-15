@@ -22,7 +22,8 @@ BOOST_FIXTURE_TEST_CASE(serialize_deserialize, TaskFixture)
 
     // i teraz deserializacja...
     TaskVec in_tvec;
-    sff.deserialize(ser, in_tvec);
+    int ret = sff.deserialize(ser, in_tvec);
+    BOOST_REQUIRE(ret);
     std::shared_ptr<Task> at = in_tvec[0];
 
     // i sprawdzanie...
@@ -41,38 +42,47 @@ BOOST_FIXTURE_TEST_CASE(corrupted_file_deserialize, TaskFixture)
     SimpleFileFormat sff;
     std::string corr_file = "";
     int i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "1;";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "1:;";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "1:22;";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "1:22:;";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "1:22:33:;";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "1:22:33:44:;";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "1;";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 
     corr_file = "dupa jasio";
     i = sff.deserialize(corr_file, vec);
+    BOOST_REQUIRE_EQUAL(vec.size(), 0);
     BOOST_CHECK_EQUAL(i, 0);
 }
 

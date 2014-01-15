@@ -8,7 +8,7 @@ add_definitions(-std=c++11 -g -Wall --pedantic)
 
 set(BUILD_SHARED_LIBS true)
 
-find_package(Boost COMPONENTS unit_test_framework thread program_options)
+find_package(Boost COMPONENTS unit_test_framework thread program_options regex)
 
 include_directories(
     ${Boost_INCLUDE_DIRS}

@@ -32,18 +32,28 @@ struct FakeFileFormat : public FileFormatInterface {
     std::string d;
 };
 
+struct DataStoreFixture {
+    DataStoreFixture()
+        : FIXT_FILEN("test.db")
+        , DUPAJASIA_STR("Dupa Jasia")
+        , DUPAJASIA_FNAME("test_dupajasia.db")
+    {
+    }
+
+    const std::string FIXT_FILEN;
+    const std::string DUPAJASIA_STR;
+    const std::string DUPAJASIA_FNAME;
+};
+
 BOOST_AUTO_TEST_SUITE(Datastore_Test)
 
-const std::string FIXT_FILEN = "test.db";
-const std::string dupajasia = "Dupa Jasia";
-const std::string filename = "test_dupajasia.db";
 TaskVec fakeVec;    // fakeowy kontener
-BOOST_AUTO_TEST_CASE(function_save)
+BOOST_FIXTURE_TEST_CASE(function_save, DataStoreFixture)
 {
     DataStore<FakeFileFormat> saver(FIXT_FILEN);
     // Fakeujemy to co wyplowa serializer
     FakeFileFormat* const fff = dynamic_cast<FakeFileFormat*>(saver.getFFObj());
-    fff->s = dupajasia;
+    fff->s = DUPAJASIA_STR;
 
     // zapis do pliku
     bool ret = saver.save(fakeVec);
@@ -51,33 +61,33 @@ BOOST_AUTO_TEST_CASE(function_save)
 
     // sprawdzanie niezaleznymi funkcjami zawartosci pliku
     std::ifstream file;
-    file.open(filename, std::ifstream::in);
+    file.open(DUPAJASIA_FNAME, std::ifstream::in);
     BOOST_CHECK_EQUAL(file.good(), true);
     char buf[100];
     memset(buf, 0, 100);
     // + 10 bo moze zapisaly sie jakies smieci?
-    file.read(buf, dupajasia.size() + 1 + 10);
-    BOOST_CHECK_EQUAL(dupajasia.compare(buf), 0);
+    file.read(buf, DUPAJASIA_STR.size() + 1 + 10);
+    BOOST_CHECK_EQUAL(DUPAJASIA_STR.compare(buf), 0);
     file.close();
 }
 
-BOOST_AUTO_TEST_CASE(function_load)
+BOOST_FIXTURE_TEST_CASE(function_load, DataStoreFixture)
 {
     // write some testing dato in to file
     std::ofstream file;
-    file.open(filename, std::ostream::out);
+    file.open(DUPAJASIA_FNAME, std::ostream::out);
     BOOST_CHECK_EQUAL(file.good(), true);
-    file.write(dupajasia.c_str(), dupajasia.size());
+    file.write(DUPAJASIA_STR.c_str(), DUPAJASIA_STR.size());
     file.close();
 
     // check is stdlib file read methods work...
     std::ifstream infile;
-    infile.open(filename, std::istream::in);
+    infile.open(DUPAJASIA_FNAME, std::istream::in);
     char* buf = new char[100];
     memset(buf, 0, 100);
-    infile.read(buf, dupajasia.size());
+    infile.read(buf, DUPAJASIA_STR.size());
     infile.close();
-    BOOST_REQUIRE_EQUAL(dupajasia.compare(buf), 0);
+    BOOST_REQUIRE_EQUAL(DUPAJASIA_STR.compare(buf), 0);
 
     // if so, test our class loader/reader
     DataStore<FakeFileFormat> loader(FIXT_FILEN);
@@ -89,7 +99,7 @@ BOOST_AUTO_TEST_CASE(function_load)
     loader.load(fakeVec);
 
     BOOST_TEST_MESSAGE(fff->d);
-    BOOST_CHECK_EQUAL(dupajasia.compare(fff->d), 0);
+    BOOST_CHECK_EQUAL(DUPAJASIA_STR.compare(fff->d), 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

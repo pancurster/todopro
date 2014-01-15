@@ -8,6 +8,7 @@
 #include <cstring>
 #include <algorithm>
 #include <memory>
+#include <regex>
 
 SimpleFileFormat::SimpleFileFormat() { }
 
@@ -54,19 +55,18 @@ std::shared_ptr<Task> SimpleFileFormat::deserialize_single_task(std::string& lin
 
     int type, state;
     char c[5]= {0};
+
     std::stringstream ss(line);
 
-    ss  >> t->payload->id   >> c[0]
-        >> t->payload->pri  >> c[1]
-        >> type             >> c[2]
-        >> state            >> c[3];
+    ss >> t->payload->id    >> c[0]
+       >> t->payload->pri   >> c[1]
+       >> type              >> c[2]
+       >> state             >> c[3];
 
     t->payload->type = static_cast<Task::TaskType>(type);
     t->payload->state = static_cast<Task::TaskState>(state);
 
-    // and, at the end, take description of task.
-    // Can't find sexy construction to fetch from ss
-    // a string with whitespaces.
+    // std::noskipws wont work here
     std::string desc = ss.str();
     size_t e = desc.rfind(";");
     size_t s = desc.rfind(":");

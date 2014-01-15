@@ -23,7 +23,6 @@ private:
     bool save_to_file(const std::string& in_buff) const;
     bool read_from_file(std::string& image) const;
 
-    //FileFormatInterface* file_format;
     boost::scoped_ptr<FileFormatInterface> file_format;
     std::string m_filename;
 };
@@ -39,7 +38,6 @@ DataStore<T>::DataStore(const std::string& filename)
 template <class T>
 DataStore<T>::~DataStore()
 {
-    //delete file_format;
 }
 
 
