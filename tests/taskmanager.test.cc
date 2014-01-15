@@ -24,6 +24,16 @@ struct TaskManagerFixture {
         tm->add(task);
         return task;
     }
+    // Task added with description like: "'pattern'[num]"
+    void addManyTasks(int howmany, std::string pattern)
+    {
+        std::stringstream tname;
+        for (int i=0; i<howmany; ++i) {
+            tname.str("");
+            tname << pattern << i;
+            addOneTask(tname.str());
+        }
+    }
     TaskManager* tm;
 };
 
@@ -49,6 +59,55 @@ BOOST_FIXTURE_TEST_CASE(task_add, TaskManagerFixture)
     
     task.reset();
     BOOST_CHECK_EQUAL(tm->add(task), false);
+}
+
+BOOST_FIXTURE_TEST_CASE(add_two_tasks, TaskManagerFixture)
+{
+    std::shared_ptr<Task> task1 = addOneTask("zadanie 1");
+    std::shared_ptr<Task> task2 = addOneTask("zadanie 2");
+
+    // sprawdzanie czy dziala inkrementacja id
+    BOOST_CHECK_NE(task1->payload->id, task2->payload->id);
+
+}
+
+BOOST_FIXTURE_TEST_CASE(add_many_more_task, TaskManagerFixture)
+{
+    int TASK_NUM = 10;
+
+    addManyTasks(TASK_NUM, std::string("task nr: "));
+    BOOST_CHECK_EQUAL(tm->taskmain.size(), TASK_NUM);
+
+    // Check: they exist and we can fetch them
+    std::shared_ptr<Task> t;
+    std::stringstream tname;
+    for (int i=0; i<TASK_NUM; ++i) {
+        tname.str("");
+        tname << "task nr: " << i;
+        t = tm->findByDesc(tname.str());
+        BOOST_CHECK(t.get());
+        // Check size of dict AFTER first find query. We synchronize
+        // dict to taskVec in lazy scheme - on first query.
+        BOOST_CHECK_EQUAL(tm->taskbydesc.size(), TASK_NUM);
+    }
+}
+
+BOOST_FIXTURE_TEST_CASE(rm_many_tasks, TaskManagerFixture)
+{
+    int TASK_NUM = 10;
+
+    addManyTasks(TASK_NUM, std::string("task_"));
+
+    std::stringstream tname;
+    std::shared_ptr<Task> t;
+    for (int i=0; i<TASK_NUM; ++i) {
+        tname.str("");
+        tname << "task_" << i;
+        t = tm->select(tname.str());
+        tm->del(t);
+    }
+    // Everything was removed?
+    BOOST_CHECK_EQUAL(tm->taskmain.size(), 0);
 }
 
 BOOST_FIXTURE_TEST_CASE(task_done, TaskManagerFixture)
