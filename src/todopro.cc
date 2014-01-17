@@ -7,9 +7,10 @@
 
 #include <iostream>
 #include <memory>
+#include <cstdlib>
 
-const char* ToDoPro::VERSION="0.0.2";
-const char* ToDoPro::DEF_FILENAME = "test.db";
+const char* ToDoPro::VERSION="0.0.3";
+const char* ToDoPro::DEF_FILENAME = ".todopro.db";
 
 int main(int argc, const char* argv[])
 {
@@ -63,5 +64,14 @@ void ToDoPro::save()
     if (ret == false) {
         std::cerr << "Error saving tasks\n";
     }
+}
+
+std::string ToDoPro::get_file_db_name()
+{
+    char* phome = std::getenv("HOME");
+    std::stringstream home("");
+    home << phome << "/" << DEF_FILENAME;
+
+    return home.str();
 }
 
