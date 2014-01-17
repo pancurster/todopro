@@ -4,31 +4,32 @@
 #include "task.h"
 #include "taskmanager.h"
 #include <string>
+#include <ostream>
 
 class TaskView {
 public:
     virtual ~TaskView() {}
-    virtual void showTask(TaskVec&) const = 0;
-    virtual void showTask(std::shared_ptr<Task>& t) const = 0;
-    virtual void showTask(Task* t) const = 0;
+    virtual void showTask(TaskVec&, std::ostream&) const = 0;
+    virtual void showTask(std::shared_ptr<Task>& t, std::ostream&) const = 0;
+    virtual void showTask(Task* t, std::ostream&) const = 0;
 };
 
 class CliView : public TaskView {
 public:
-    void showTask(TaskVec& tvec) const;
-    void showTask(std::shared_ptr<Task>& t) const;
-    void showTask(Task* t) const;
+    CliView();
+    ~CliView();
+    void showTask(TaskVec& tvec, std::ostream&) const;
+    void showTask(std::shared_ptr<Task>& t, std::ostream&) const;
+    void showTask(Task* t, std::ostream&) const;
+
+    void setColorizedOutput(bool);
 
 protected:
     std::string show_task_common(Task* t) const;
-    void print_header() const ;
+    void print_header(std::ostream&) const ;
 
-    enum {
-        FIELD_WIDTH_ID    = 5,
-        FIELD_WIDTH_PRI   = 5,
-        FIELD_WIDTH_STATE = 7,
-        FIELD_WIDTH_DESC  = 70
-    };
+    bool m_colorized_output;
+
 };
 
 #endif //__TASKVIEW_H__

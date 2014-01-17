@@ -10,12 +10,15 @@
 #include "../src/datastore.h"
 #include "../src/taskview.h"
 #include "../src/sff.h"
+#include "../src/style.h"
 
 #include "simplefileformat.test.cc"
 #include "taskmanager.test.cc"
 #include "datastore.test.cc"
 #include "task.test.cc"
 #include "userinput.test.cc"
+#include <iostream>
+#include <iomanip>
 
 struct MyFixture {
     MyFixture()
@@ -76,8 +79,28 @@ BOOST_FIXTURE_TEST_CASE(test_with_fixture, MyFixture)
 BOOST_FIXTURE_TEST_CASE(single_task_view, MyFixture)
 {
     std::shared_ptr<Task> t = tdp->taskmanager->create("test task");
-    tdp->view->showTask(t);
-    tdp->view->showTask(t.get());
+
+    std::stringstream ss;
+    tdp->view->showTask(t, ss);
+    std::string tv = ss.str();
+    // czy cos wyplul?
+    BOOST_REQUIRE(tv.size() > 0);
+
+    std::stringstream proper_str("");
+    proper_str << std::setw(Style::FIELD_WIDTH_ID) << std::left << "0"
+               << std::setw(Style::FIELD_WIDTH_PRI) << std::left << "0"
+               << std::setw(Style::FIELD_WIDTH_STATE) << std::left << " "
+               << std::setw(Style::FIELD_WIDTH_DESC) << std::left << "test task";
+    proper_str << "\n";
+    // czy zgadzia sie ze wzorcem
+    int ret = tv.compare(proper_str.str());
+    if (ret) {
+        // Pomocne wyrzucenie porownywanych stringow
+        std::cout << "Compare Failed: \n";
+        std::cout << "---\"" << tv << "\"" << "\n"
+                  << "+++\"" << proper_str.str() << "\"" << "\n";
+    }
+    BOOST_CHECK_EQUAL(ret, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,71 +1,67 @@
 #include "taskview.h"
 #include "taskmanager.h" //TaskMap
 #include "task.h"
+#include "style.h"
 
 #include <iostream>
 #include <iomanip>
+#include <ostream>
 
-namespace Style {
-
-const char* K_BOLD="\x1B[1m";
-const char* K_NO_STYLE="\x1B[0m";
-const char* K_BLACK_ON_WHITE="\x1B[37;40m";
-const char* K_WHITE_ON_BLACK="\x1B[37;44m";
-
+CliView::CliView()
+    : m_colorized_output(true)
+{
 }
 
-namespace Labels {
-
-const char* ID      = "Id";
-const char* PRI     = "Pri";
-const char* STATE   = "State";
-const char* DESC    = "Desc";
-
-const char* STATE_VAL[] ={
-    "",
-    "P",
-    "S",
-    "D"
-};
+CliView::~CliView()
+{
 }
 
-void CliView::showTask(TaskVec& tvec) const
+void CliView::showTask(TaskVec& tvec, std::ostream& out) const
 {
     // Print ID Pri and rest label names
-    this->print_header();
+    this->print_header(out);
+
+    const char* second_color_style = Style::K_WHITE_ON_BLUE;
+    if (m_colorized_output == false)
+        second_color_style = Style::K_BLACK_ON_WHITE;
 
     int color=0;
     for(auto it=tvec.begin(); it!=tvec.end(); ++it, color^=1) {
 
-        if (color) std::cout << Style::K_BLACK_ON_WHITE;
-        else       std::cout << Style::K_WHITE_ON_BLACK;
+        if (color) out << Style::K_BLACK_ON_WHITE;
+        else       out << second_color_style;
 
-        std::cout << show_task_common(it->get());
+        out << show_task_common(it->get());
 
-        std::cout << Style::K_NO_STYLE << "\n";
+        out << Style::K_NO_STYLE << "\n";
     }
-    std::cout << "\n";
+    out << "\n";
 }
 
-void CliView::print_header() const
+void CliView::print_header(std::ostream& out) const
 {
-    std::cout << Style::K_BOLD;
-    std::cout << std::setw(FIELD_WIDTH_ID)    << std::left << Labels::ID;
-    std::cout << std::setw(FIELD_WIDTH_PRI)   << std::left << Labels::PRI;
-    std::cout << std::setw(FIELD_WIDTH_STATE) << std::left << Labels::STATE;
-    std::cout << std::setw(FIELD_WIDTH_DESC)  << std::left << Labels::DESC
-              << Style::K_NO_STYLE
-              << "\n";
+    out << Style::K_BOLD;
+    out << std::setw(Style::FIELD_WIDTH_ID)    << std::left << Style::Labels::ID;
+    out << std::setw(Style::FIELD_WIDTH_PRI)   << std::left << Style::Labels::PRI;
+    out << std::setw(Style::FIELD_WIDTH_STATE) << std::left << Style::Labels::STATE;
+    out << std::setw(Style::FIELD_WIDTH_DESC)  << std::left << Style::Labels::DESC
+        << Style::K_NO_STYLE
+        << "\n";
 }
 
-void CliView::showTask(std::shared_ptr<Task>& t) const
+void CliView::showTask(std::shared_ptr<Task>& t, std::ostream& out) const
 {
-    std::cout << show_task_common(t.get()) << "\n";
+    out << show_task_common(t.get()) << "\n";
 }
 
-void CliView::showTask(Task* t) const
+void CliView::showTask(Task* t, std::ostream& out) const
 {
-    std::cout << show_task_common(t) << "\n";
+    out << show_task_common(t) << "\n";
+}
+
+void CliView::setColorizedOutput(bool colorize)
+{
+    m_colorized_output = colorize;
 }
 
 std::string CliView::show_task_common(Task* t) const
@@ -73,10 +69,10 @@ std::string CliView::show_task_common(Task* t) const
     using namespace std;
 
     stringstream str;
-    str << setw(FIELD_WIDTH_ID) << left << t->payload->id
-        << setw(FIELD_WIDTH_PRI) << left << t->payload->pri 
-        << setw(FIELD_WIDTH_STATE) << left << Labels::STATE_VAL[t->payload->state]
-        << setw(FIELD_WIDTH_DESC) << left << t->payload->desc ;
+    str << setw(Style::FIELD_WIDTH_ID) << left << t->payload->id
+        << setw(Style::FIELD_WIDTH_PRI) << left << t->payload->pri 
+        << setw(Style::FIELD_WIDTH_STATE) << left << Style::Labels::STATE_VAL[t->payload->state]
+        << setw(Style::FIELD_WIDTH_DESC) << left << t->payload->desc ;
 
     return str.str();
 }

@@ -5,6 +5,7 @@
 #include "todopro.h"
 
 #include <iostream>
+#include <ostream>
 #include <memory>
 
 UserInput::UserInput(TaskManager& tm, const TaskView& tv)
@@ -47,7 +48,7 @@ bool UserInput::commands(int ac, const char* av[]) const
 
     } else {
         // OK. No select, no create, we can only show and THE END.
-        taskview.showTask(taskmanager.taskmain);
+        taskview.showTask(taskmanager.taskmain, std::cout);
         return true;
     }
 
@@ -71,10 +72,10 @@ bool UserInput::commands(int ac, const char* av[]) const
 
     // VIEW
     if (temptask) {
-        taskview.showTask(temptask);
+        taskview.showTask(temptask, std::cout);
 
     } else {
-        taskview.showTask(taskmanager.taskmain);
+        taskview.showTask(taskmanager.taskmain, std::cout);
     }
 
     return true;
