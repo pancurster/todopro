@@ -23,7 +23,7 @@ public:
 
     static const char* VERSION;
     static const char* DEF_FILENAME;
-private:
+protected:
     std::string get_file_db_name();
 };
 
